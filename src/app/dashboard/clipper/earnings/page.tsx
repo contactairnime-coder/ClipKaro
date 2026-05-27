@@ -47,12 +47,17 @@ export default function EarningsPage() {
 
   useEffect(() => {
     async function load() {
-      const [earnRes, payoutsRes] = await Promise.all([
+      const [earnRes, payoutsRes, profileRes] = await Promise.all([
         fetch("/api/earnings/my"),
         fetch("/api/earnings/withdraw/history"),
+        fetch("/api/user/profile"),
       ])
       if (earnRes.ok) setData(await earnRes.json())
       if (payoutsRes.ok) setPayouts(await payoutsRes.json())
+      if (profileRes.ok) {
+        const profile = await profileRes.json()
+        if (profile?.upiId) setWithdrawUpi(profile.upiId)
+      }
       setLoading(false)
     }
     load()
