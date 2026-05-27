@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -31,21 +31,40 @@ export default function AdminCampaigns() {
   const [allCampaigns, setAllCampaigns] = useState<Campaign[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    Promise.all([
+  const fetchData = useCallback(async () => {
+    const [p, a] = await Promise.all([
       fetch("/api/admin/campaigns/pending").then((r) => r.json()),
-      fetch("/api/campaigns/my").then((r) => r.json()),
-    ]).then(([p, a]) => {
-      setPending(p)
-      setAllCampaigns(a)
-    }).finally(() => setLoading(false))
+      fetch("/api/admin/campaigns/all").then((r) => r.json()),
+    ])
+    if (Array.isArray(p)) setPending(p)
+    if (Array.isArray(a)) setAllCampaigns(a)
   }, [])
+
+  useEffect(() => {
+    fetchData().finally(() => setLoading(false))
+  }, [fetchData])
 
   async function approveCampaign(id: string) {
     const res = await fetch(`/api/admin/campaigns/${id}/approve`, { method: "POST" })
     if (res.ok) {
       toast.success("Campaign approved!")
       setPending((prev) => prev.filter((c) => c.id !== id))
+      fetchData()
+    } else {
+      const err = await res.json().catch(() => ({}))
+      toast.error(err.error || "Failed to approve")
+    }
+  }
+
+  async function rejectCampaign(id: string) {
+    const res = await fetch(`/api/admin/campaigns/${id}/reject`, { method: "POST" })
+    if (res.ok) {
+      toast.success("Campaign rejected")
+      setPending((prev) => prev.filter((c) => c.id !== id))
+      fetchData()
+    } else {
+      const err = await res.json().catch(() => ({}))
+      toast.error(err.error || "Failed to reject")
     }
   }
 
@@ -58,7 +77,7 @@ export default function AdminCampaigns() {
       <Tabs defaultValue="pending">
         <TabsList>
           <TabsTrigger value="pending">Pending Approval ({pending.length})</TabsTrigger>
-          <TabsTrigger value="all">All Campaigns</TabsTrigger>
+          <TabsTrigger value="all">All Campaigns ({allCampaigns.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="pending" className="mt-4">
@@ -80,7 +99,7 @@ export default function AdminCampaigns() {
                     </div>
                     <div className="flex gap-2">
                       <Button size="sm" onClick={() => approveCampaign(c.id)}>Approve</Button>
-                      <Button size="sm" variant="destructive">Reject</Button>
+                      <Button size="sm" variant="destructive" onClick={() => rejectCampaign(c.id)}>Reject</Button>
                     </div>
                   </CardContent>
                 </Card>

@@ -69,24 +69,7 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader><CardTitle>Connected Social Accounts</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">YouTube Channel URL</label>
-              <Input placeholder="https://youtube.com/@yourchannel" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Instagram Handle</label>
-              <Input placeholder="@yourhandle" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">TikTok Handle</label>
-              <Input placeholder="@yourhandle" />
-            </div>
-            <p className="text-xs text-muted-foreground">Social links help creators verify your profile.</p>
-          </CardContent>
-        </Card>
+
 
         <Button type="submit" disabled={saving}>
           {saving ? "Saving..." : "Save Changes"}

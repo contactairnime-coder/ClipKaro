@@ -27,6 +27,9 @@
 | 10 | Ban API didn't update profile isVerified | Added `prisma.profile.update` for isVerified on ban/unban |
 | 11 | Build lint errors (unused vars) | Removed unused `data`, `updated` variables |
 | 12 | Login/Signup page shows when already logged in | Added session check → redirect to dashboard |
+| 13 | Admin campaigns: Reject button dead, All Campaigns tab always empty | Wired reject handler + created `/api/admin/campaigns/all` endpoint |
+| 14 | Clipper Refresh Views always 403 | Changed to allow clippers to sync their own submissions |
+| 15 | Clipper settings: social inputs not wired | Removed unused social section (no DB fields for clipper) |
 
 ---
 
