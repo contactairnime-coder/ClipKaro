@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { toast } from "sonner"
 
 type User = {
@@ -23,21 +24,39 @@ export default function AdminUsers() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [banConfirmId, setBanConfirmId] = useState<string | null>(null)
+  const [banning, setBanning] = useState<string | null>(null)
+  const [bannedIds, setBannedIds] = useState<Set<string>>(new Set())
 
-  useEffect(() => {
-    fetch("/api/admin/users")
-      .then((r) => r.json())
-      .then(setUsers)
-      .finally(() => setLoading(false))
+  const fetchUsers = useCallback(async () => {
+    const res = await fetch("/api/admin/users")
+    if (res.ok) setUsers(await res.json())
   }, [])
 
-  async function toggleBan(userId: string, ban: boolean) {
+  useEffect(() => {
+    fetchUsers().finally(() => setLoading(false))
+  }, [fetchUsers])
+
+  async function toggleBan(userId: string, currentlyBanned: boolean) {
+    setBanning(userId)
     const res = await fetch(`/api/admin/users/${userId}/ban`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: ban ? "ban" : "unban" }),
+      body: JSON.stringify({ action: currentlyBanned ? "unban" : "ban" }),
     })
-    if (res.ok) toast.success(ban ? "User banned" : "User unbanned")
+    setBanning(null)
+    setBanConfirmId(null)
+    if (res.ok) {
+      toast.success(currentlyBanned ? "User unbanned" : "User banned")
+      const newBanned = new Set(bannedIds)
+      if (currentlyBanned) newBanned.delete(userId)
+      else newBanned.add(userId)
+      setBannedIds(newBanned)
+      fetchUsers()
+    } else {
+      toast.error("Failed to update user")
+    }
   }
 
   const filtered = users.filter((u) => {
@@ -48,6 +67,12 @@ export default function AdminUsers() {
 
   if (loading) return <div className="h-64 animate-pulse rounded bg-muted" />
 
+  const roleTabs = [
+    { key: "CLIPPER", label: "Clippers", plural: "clippers" },
+    { key: "CREATOR", label: "Creators", plural: "creators" },
+    { key: "ADMIN", label: "Admins", plural: "admins" },
+  ]
+
   return (
     <div>
       <div className="mb-6">
@@ -57,13 +82,13 @@ export default function AdminUsers() {
 
       <Tabs defaultValue="clippers">
         <TabsList>
-          <TabsTrigger value="clippers">Clippers</TabsTrigger>
-          <TabsTrigger value="creators">Creators</TabsTrigger>
-          <TabsTrigger value="admins">Admins</TabsTrigger>
+          {roleTabs.map((t) => (
+            <TabsTrigger key={t.plural} value={t.plural}>{t.label}</TabsTrigger>
+          ))}
         </TabsList>
 
-        {["CLIPPER", "CREATOR", "ADMIN"].map((role) => (
-          <TabsContent key={role} value={role.toLowerCase() + "s"} className="mt-4">
+        {roleTabs.map(({ key: role, plural }) => (
+          <TabsContent key={plural} value={plural} className="mt-4">
             {filtered.filter((u) => u.role === role).length === 0 ? (
               <Card><CardContent className="py-12 text-center text-muted-foreground">No users found</CardContent></Card>
             ) : (
@@ -80,23 +105,43 @@ export default function AdminUsers() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.filter((u) => u.role === role).map((u) => (
-                      <tr key={u.id} className="border-b last:border-0">
-                        <td className="py-3 font-medium">{u.name || "—"}</td>
-                        <td className="py-3">{u.email}</td>
-                        <td className="py-3 text-muted-foreground">{new Date(u.createdAt).toLocaleDateString()}</td>
-                        <td className="py-3">₹{u.totalEarned.toLocaleString()}</td>
-                        <td className="py-3">
-                          <Badge variant={u.isVerified ? "default" : "secondary"}>{u.isVerified ? "Active" : "Inactive"}</Badge>
-                        </td>
-                        <td className="py-3">
-                          <div className="flex gap-1">
-                            <Button size="sm" variant="outline">View</Button>
-                            <Button size="sm" variant="destructive" onClick={() => toggleBan(u.id, true)}>Ban</Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                    {filtered.filter((u) => u.role === role).map((u) => {
+                      const isBanned = bannedIds.has(u.id)
+                      return (
+                        <tr key={u.id} className="border-b last:border-0">
+                          <td className="py-3 font-medium">{u.name || "—"}</td>
+                          <td className="py-3">{u.email}</td>
+                          <td className="py-3 text-muted-foreground">{new Date(u.createdAt).toLocaleDateString()}</td>
+                          <td className="py-3">₹{u.totalEarned.toLocaleString()}</td>
+                          <td className="py-3">
+                            <Badge variant={isBanned ? "destructive" : u.isVerified ? "default" : "secondary"}>
+                              {isBanned ? "Banned" : u.isVerified ? "Active" : "Inactive"}
+                            </Badge>
+                          </td>
+                          <td className="py-3">
+                            <div className="flex gap-1">
+                              <Button size="sm" variant="outline" onClick={() => setSelectedUser(u)}>View</Button>
+                              {banConfirmId === u.id ? (
+                                <div className="flex gap-1">
+                                  <Button size="sm" variant="destructive" onClick={() => toggleBan(u.id, isBanned)} disabled={banning === u.id}>
+                                    {banning === u.id ? "..." : "Confirm"}
+                                  </Button>
+                                  <Button size="sm" variant="outline" onClick={() => setBanConfirmId(null)}>Cancel</Button>
+                                </div>
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  variant={isBanned ? "outline" : "destructive"}
+                                  onClick={() => setBanConfirmId(u.id)}
+                                >
+                                  {isBanned ? "Unban" : "Ban"}
+                                </Button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -104,6 +149,37 @@ export default function AdminUsers() {
           </TabsContent>
         ))}
       </Tabs>
+
+      <Dialog open={!!selectedUser} onOpenChange={(o) => { if (!o) setSelectedUser(null) }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>User Details</DialogTitle>
+          </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <span className="text-muted-foreground">Name</span>
+                <span className="font-medium">{selectedUser.name || "—"}</span>
+                <span className="text-muted-foreground">Email</span>
+                <span className="font-medium">{selectedUser.email}</span>
+                <span className="text-muted-foreground">Role</span>
+                <span className="font-medium">{selectedUser.role}</span>
+                <span className="text-muted-foreground">Joined</span>
+                <span className="font-medium">{new Date(selectedUser.createdAt).toLocaleDateString()}</span>
+                <span className="text-muted-foreground">Total {selectedUser.role === "CREATOR" ? "Spent" : "Earned"}</span>
+                <span className="font-medium">₹{selectedUser.totalEarned.toLocaleString()}</span>
+                <span className="text-muted-foreground">Status</span>
+                <span className="font-medium">{selectedUser.isVerified ? "Active" : "Inactive"}</span>
+                <span className="text-muted-foreground">Submissions</span>
+                <span className="font-medium">{selectedUser._count.submissions}</span>
+                <span className="text-muted-foreground">Campaigns</span>
+                <span className="font-medium">{selectedUser._count.campaigns}</span>
+              </div>
+              <Button variant="outline" className="w-full" onClick={() => setSelectedUser(null)}>Close</Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

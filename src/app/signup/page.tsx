@@ -44,14 +44,6 @@ function SignupForm() {
       return
     }
 
-    if (data.user) {
-      await fetch("/auth/complete-profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, role }),
-      })
-    }
-
     setSuccess(true)
     setLoading(false)
   }

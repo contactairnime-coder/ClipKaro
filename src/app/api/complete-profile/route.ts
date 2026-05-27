@@ -17,10 +17,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid role" }, { status: 400 })
     }
 
-    const existing = await prisma.profile.findUnique({
-      where: { id: user.id },
-    })
-
+    const existing = await prisma.profile.findUnique({ where: { id: user.id } })
     if (existing) {
       return NextResponse.json(existing)
     }
@@ -38,13 +35,11 @@ export async function POST(request: Request) {
 
     if (role === "CREATOR") {
       await prisma.creatorProfile.create({
-        data: {
-          userId: profile.id,
-        },
-      })
+        data: { userId: profile.id },
+      }).catch(() => {})
     }
 
-    return NextResponse.json(profile)
+    return NextResponse.json(profile, { status: 201 })
   } catch (error) {
     console.error("Complete profile error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
