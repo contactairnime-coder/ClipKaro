@@ -19,7 +19,7 @@ async function handleReject(request: Request, params: { id: string }) {
 
   const body = await request.json().catch(() => ({}))
 
-  const updated = await prisma.submission.update({
+  await prisma.submission.update({
     where: { id: params.id },
     data: { status: "REJECTED", rejectionReason: body.reason || null },
   })

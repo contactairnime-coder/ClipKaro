@@ -19,7 +19,7 @@ async function handleApprove(request: Request, params: { id: string }) {
 
   const earnings = Math.round(submission.viewCount * submission.campaign.bountyPerLakhViews / 100000)
 
-  const [updated] = await prisma.$transaction([
+  await prisma.$transaction([
     prisma.submission.update({
       where: { id: params.id },
       data: { status: "APPROVED", earningsCalculated: earnings },
