@@ -1,17 +1,24 @@
 import Razorpay from "razorpay"
 import { validatePaymentVerification, validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils"
 
-const key_id = process.env.RAZORPAY_KEY_ID!
-const key_secret = process.env.RAZORPAY_KEY_SECRET!
+let instance: Razorpay | null = null
 
-const instance = new Razorpay({ key_id, key_secret })
-
-export function getRazorpayInstance() {
+function getInstance() {
+  if (!instance) {
+    instance = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID!,
+      key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    })
+  }
   return instance
 }
 
+export function getRazorpayInstance() {
+  return getInstance()
+}
+
 export async function createOrder(amountInPaise: number, receipt: string, notes?: Record<string, string>) {
-  return instance.orders.create({
+  return getInstance().orders.create({
     amount: amountInPaise,
     currency: "INR",
     receipt,
@@ -32,7 +39,7 @@ export function verifyWebhookSignature(body: string, signature: string) {
 }
 
 export async function createPayout(amountInPaise: number, upiId: string, name: string, referenceId: string, notes?: Record<string, string>) {
-  const result = await instance.api.post<Record<string, unknown>, { id: string }>({
+  const result = await getInstance().api.post<Record<string, unknown>, { id: string }>({
     url: "/v1/payouts",
     data: {
       account_number: process.env.RAZORPAY_ACCOUNT_NUMBER!,
