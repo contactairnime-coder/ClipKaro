@@ -10,6 +10,9 @@
 
 | # | Issue | Status |
 |---|-------|--------|
+| 1 | Signout: `NEXT_PUBLIC_APP_URL` missing on Vercel — redirect fails | ✅ Fixed |
+| 2 | Creator: analytics & settings pages missing — "not found" | ✅ Fixed |
+| 3 | Verification email link opens localhost:3000 instead of Vercel URL | ⏳ Fix: change Site URL in Supabase Dashboard → Authentication → Settings |
 |   |       | ⏳ |
 
 ---
@@ -18,6 +21,8 @@
 
 | # | Issue | Fix |
 |---|-------|-----|
+| 1 | Signout crash | Added hardcoded fallback URL in signout route |
+| 2 | Creator analytics/settings 404 | Created both pages |
 
 ---
 
