@@ -37,7 +37,7 @@ export async function GET(request: Request) {
         email,
         name: (meta.name as string) || (meta.full_name as string) || email.split("@")[0] || null,
         avatar: (meta.avatar_url as string) || null,
-        role,
+        role: role as "CREATOR" | "CLIPPER",
       },
     })
     if (role === "CREATOR") {

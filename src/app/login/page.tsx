@@ -26,6 +26,7 @@ export default function LoginPage() {
         setLoading(false)
       }
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function handleEmailLogin(e: React.FormEvent) {

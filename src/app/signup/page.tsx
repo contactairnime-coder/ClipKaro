@@ -33,6 +33,7 @@ function SignupForm() {
         setLoading(false)
       }
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function handleSignup(e: React.FormEvent) {
