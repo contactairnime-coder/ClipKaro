@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -85,9 +86,10 @@ export default function AdminCampaigns() {
             <Card><CardContent className="py-12 text-center text-muted-foreground">No pending campaigns</CardContent></Card>
           ) : (
             <div className="space-y-3">
-              {pending.map((c) => (
-                <Card key={c.id}>
-                  <CardContent className="flex items-start justify-between p-4">
+              {pending.map((c, index) => (
+                <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1, duration: 0.4 }} whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}>
+                  <Card>
+                    <CardContent className="flex items-start justify-between p-4">
                     <div>
                       <h3 className="font-semibold">{c.title}</h3>
                       <p className="text-sm text-muted-foreground">by {c.creator.name || c.creator.email}</p>
@@ -103,6 +105,7 @@ export default function AdminCampaigns() {
                     </div>
                   </CardContent>
                 </Card>
+                </motion.div>
               ))}
             </div>
           )}
@@ -125,8 +128,8 @@ export default function AdminCampaigns() {
                   </tr>
                 </thead>
                 <tbody>
-                  {allCampaigns.map((c) => (
-                    <tr key={c.id} className="border-b last:border-0">
+                  {allCampaigns.map((c, index) => (
+                    <motion.tr key={c.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05, duration: 0.3 }} className="border-b last:border-0">
                       <td className="py-3 font-medium">{c.title}</td>
                       <td className="py-3">{c.creator.name || c.creator.email}</td>
                       <td className="py-3">₹{c.bountyTotal.toLocaleString()}</td>
@@ -135,7 +138,7 @@ export default function AdminCampaigns() {
                       </td>
                       <td className="py-3">{c._count.submissions}</td>
                       <td className="py-3 text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>

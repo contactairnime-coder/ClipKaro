@@ -1,10 +1,13 @@
 "use client"
 
+import { motion } from "framer-motion"
+import { AlertTriangle } from "lucide-react"
+
 export default function DashboardError({ reset }: { error: Error; reset: () => void }) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white px-4">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="text-center">
-        <span className="text-6xl">⚠️</span>
+        <AlertTriangle className="w-12 h-12 text-destructive" />
         <h1 className="mt-4 text-2xl font-bold">Dashboard Error</h1>
         <p className="mt-2 text-gray-500">Something went wrong loading your dashboard.</p>
         <button
@@ -14,6 +17,6 @@ export default function DashboardError({ reset }: { error: Error; reset: () => v
           Try Again
         </button>
       </div>
-    </div>
+    </motion.div>
   )
 }

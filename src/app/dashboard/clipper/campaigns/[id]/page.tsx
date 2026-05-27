@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -104,34 +105,55 @@ export default function CampaignDetailPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
+      <motion.div
+        className="space-y-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <div className="h-8 w-64 animate-pulse rounded bg-muted" />
         <div className="h-48 animate-pulse rounded bg-muted" />
-      </div>
+      </motion.div>
     )
   }
 
   if (!campaign) {
     return (
-      <Card>
-        <CardContent className="py-16 text-center">
-          <p className="text-lg font-medium">Campaign not found</p>
-          <Button className="mt-4" onClick={() => router.push("/dashboard/clipper")}>Browse campaigns</Button>
-        </CardContent>
-      </Card>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card>
+          <CardContent className="py-16 text-center">
+            <p className="text-lg font-medium">Campaign not found</p>
+            <Button className="mt-4" onClick={() => router.push("/dashboard/clipper")}>Browse campaigns</Button>
+          </CardContent>
+        </Card>
+      </motion.div>
     )
   }
 
   const videoId = campaign.sourceVideoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/)?.[1]
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <motion.div
+      className="mx-auto max-w-4xl"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <Button variant="ghost" className="mb-4 -ml-3" onClick={() => router.push("/dashboard/clipper")}>
         ← Back
       </Button>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
+        <motion.div
+          className="lg:col-span-2 space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
           <Card>
             {videoId ? (
               <div className="aspect-video w-full">
@@ -171,7 +193,7 @@ export default function CampaignDetailPage() {
                 ))}
               </div>
               <p className="text-xs text-muted-foreground">
-                ⏱ {campaign.minClipDuration}-{campaign.maxClipDuration}s clips
+                {campaign.minClipDuration}-{campaign.maxClipDuration}s clips
               </p>
             </CardContent>
           </Card>
@@ -208,9 +230,14 @@ export default function CampaignDetailPage() {
               </form>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
 
-        <div className="space-y-4">
+        <motion.div
+          className="space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm">Bounty per 1L Views</CardTitle></CardHeader>
             <CardContent><p className="text-3xl font-bold">₹{campaign.bountyPerLakhViews}</p></CardContent>
@@ -248,8 +275,8 @@ export default function CampaignDetailPage() {
               </CardContent>
             </Card>
           )}
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   )
 }

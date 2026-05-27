@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -83,101 +84,113 @@ export default function CreateCampaignPage() {
 
       <form onSubmit={handleSubmit}>
         <div className="space-y-6">
-          <Card>
-            <CardHeader><CardTitle>Basic Details</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">Campaign Title</Label>
-                <Input id="title" placeholder="e.g. Summer Fashion Collection" value={form.title} onChange={(e) => updateField("title", e.target.value)} required />
+          {[
+            { title: "Basic Details", content: (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Campaign Title</Label>
+                  <Input id="title" placeholder="e.g. Summer Fashion Collection" value={form.title} onChange={(e) => updateField("title", e.target.value)} required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea id="description" placeholder="Describe what kind of clips you want..." value={form.description} onChange={(e) => updateField("description", e.target.value)} required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="sourceVideoUrl">Source Video URL (YouTube link to be clipped)</Label>
+                  <Input id="sourceVideoUrl" type="url" placeholder="https://youtube.com/watch?v=..." value={form.sourceVideoUrl} onChange={(e) => updateField("sourceVideoUrl", e.target.value)} required />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea id="description" placeholder="Describe what kind of clips you want..." value={form.description} onChange={(e) => updateField("description", e.target.value)} required />
+            )},
+            { title: "Bounty & Budget", content: (
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="bountyTotal">Total Bounty (₹)</Label>
+                    <Input id="bountyTotal" type="number" min="0" placeholder="50000" value={form.bountyTotal} onChange={(e) => updateField("bountyTotal", e.target.value)} required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bountyPerLakhViews">Bounty per 1 Lakh Views (₹)</Label>
+                    <Input id="bountyPerLakhViews" type="number" min="0" placeholder="500" value={form.bountyPerLakhViews} onChange={(e) => updateField("bountyPerLakhViews", e.target.value)} required />
+                  </div>
+                </div>
+                <div className="rounded-lg bg-muted p-4">
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between"><span>Bounty Total</span><span>₹{bountyTotal.toLocaleString()}</span></div>
+                    <div className="flex justify-between"><span>Platform Fee (15%)</span><span>₹{platformFee.toLocaleString()}</span></div>
+                    <div className="flex justify-between font-bold"><span>Total Cost</span><span>₹{totalCost.toLocaleString()}</span></div>
+                  </div>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="sourceVideoUrl">Source Video URL (YouTube link to be clipped)</Label>
-                <Input id="sourceVideoUrl" type="url" placeholder="https://youtube.com/watch?v=..." value={form.sourceVideoUrl} onChange={(e) => updateField("sourceVideoUrl", e.target.value)} required />
+            )},
+            { title: "Platform Rules", content: (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Allowed Platforms</Label>
+                  <div className="flex flex-wrap gap-4">
+                    {platforms.map((p) => (
+                      <label key={p.id} className="flex items-center gap-2 text-sm">
+                        <Checkbox checked={selectedPlatforms.includes(p.id)} onCheckedChange={() => togglePlatform(p.id)} />
+                        {p.label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="minClipDuration">Min Clip Duration (seconds)</Label>
+                    <Input id="minClipDuration" type="number" min="1" value={form.minClipDuration} onChange={(e) => updateField("minClipDuration", e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="maxClipDuration">Max Clip Duration (seconds)</Label>
+                    <Input id="maxClipDuration" type="number" min="1" value={form.maxClipDuration} onChange={(e) => updateField("maxClipDuration", e.target.value)} />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="guidelines">Guidelines for Clippers</Label>
+                  <Textarea id="guidelines" placeholder="Any specific instructions for clippers..." value={form.guidelines} onChange={(e) => updateField("guidelines", e.target.value)} />
+                </div>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader><CardTitle>Bounty & Budget</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
+            )},
+            { title: "Schedule", content: (
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="bountyTotal">Total Bounty (₹)</Label>
-                  <Input id="bountyTotal" type="number" min="0" placeholder="50000" value={form.bountyTotal} onChange={(e) => updateField("bountyTotal", e.target.value)} required />
+                  <Label htmlFor="startDate">Start Date</Label>
+                  <Input id="startDate" type="date" value={form.startDate} onChange={(e) => updateField("startDate", e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="bountyPerLakhViews">Bounty per 1 Lakh Views (₹)</Label>
-                  <Input id="bountyPerLakhViews" type="number" min="0" placeholder="500" value={form.bountyPerLakhViews} onChange={(e) => updateField("bountyPerLakhViews", e.target.value)} required />
+                  <Label htmlFor="endDate">End Date</Label>
+                  <Input id="endDate" type="date" value={form.endDate} onChange={(e) => updateField("endDate", e.target.value)} />
                 </div>
               </div>
-              <div className="rounded-lg bg-muted p-4">
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between"><span>Bounty Total</span><span>₹{bountyTotal.toLocaleString()}</span></div>
-                  <div className="flex justify-between"><span>Platform Fee (15%)</span><span>₹{platformFee.toLocaleString()}</span></div>
-                  <div className="flex justify-between font-bold"><span>Total Cost</span><span>₹{totalCost.toLocaleString()}</span></div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader><CardTitle>Platform Rules</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label>Allowed Platforms</Label>
-                <div className="flex flex-wrap gap-4">
-                  {platforms.map((p) => (
-                    <label key={p.id} className="flex items-center gap-2 text-sm">
-                      <Checkbox checked={selectedPlatforms.includes(p.id)} onCheckedChange={() => togglePlatform(p.id)} />
-                      {p.label}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="minClipDuration">Min Clip Duration (seconds)</Label>
-                  <Input id="minClipDuration" type="number" min="1" value={form.minClipDuration} onChange={(e) => updateField("minClipDuration", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="maxClipDuration">Max Clip Duration (seconds)</Label>
-                  <Input id="maxClipDuration" type="number" min="1" value={form.maxClipDuration} onChange={(e) => updateField("maxClipDuration", e.target.value)} />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="guidelines">Guidelines for Clippers</Label>
-                <Textarea id="guidelines" placeholder="Any specific instructions for clippers..." value={form.guidelines} onChange={(e) => updateField("guidelines", e.target.value)} />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader><CardTitle>Schedule</CardTitle></CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="startDate">Start Date</Label>
-                <Input id="startDate" type="date" value={form.startDate} onChange={(e) => updateField("startDate", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="endDate">End Date</Label>
-                <Input id="endDate" type="date" value={form.endDate} onChange={(e) => updateField("endDate", e.target.value)} />
-              </div>
-            </CardContent>
-          </Card>
+            )},
+          ].map((section, index) => (
+            <motion.div
+              key={section.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
+            >
+              <Card>
+                <CardHeader><CardTitle>{section.title}</CardTitle></CardHeader>
+                <CardContent>{section.content}</CardContent>
+              </Card>
+            </motion.div>
+          ))}
         </div>
 
-        <div className="mt-6 flex gap-3">
+        <motion.div
+          className="mt-6 flex gap-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+        >
           <Button type="submit" disabled={loading}>
             {loading ? "Creating..." : "Create Campaign (Draft)"}
           </Button>
           <Button type="button" variant="outline" onClick={() => router.back()}>
             Cancel
           </Button>
-        </div>
+        </motion.div>
       </form>
     </div>
   )

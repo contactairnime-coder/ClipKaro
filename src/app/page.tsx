@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { Scissors, Search, IndianRupee, Megaphone, Users, TrendingUp, Target, Smile, BarChart3, Star, Camera, Music, Play, ChevronDown, ArrowRight } from "lucide-react"
 
 const sections = [
   { id: "how-it-works", label: "How it Works" },
@@ -22,10 +23,10 @@ const faqs = [
   { q: "Koi bhi join kar sakta hai?", a: "Haan! India ka koi bhi video creator ya clipper join kar sakta hai. Bas aapke paas ek valid UPI ID hona chahiye payment receive karne ke liye." },
 ]
 
-const platformIcons: Record<string, string> = {
-  YOUTUBE_SHORTS: "▶",
-  INSTAGRAM_REELS: "📸",
-  TIKTOK: "🎵",
+const platformIcons: Record<string, React.ReactNode> = {
+  YOUTUBE_SHORTS: <Play className="w-5 h-5" />,
+  INSTAGRAM_REELS: <Camera className="w-5 h-5" />,
+  TIKTOK: <Music className="w-5 h-5" />,
 }
 
 function Navbar() {
@@ -35,7 +36,7 @@ function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-2xl">✂️</span>
+          <Scissors className="w-5 h-5" />
           <span className="text-xl font-bold">ClipKaro</span>
         </Link>
 
@@ -155,15 +156,15 @@ function HowItWorksSection() {
   const [tab, setTab] = useState<"clipper" | "creator">("clipper")
 
   const clipperSteps = [
-    { step: 1, title: "Campaign Dhundho", desc: "Browse active campaigns, dekho kaun kitna pay kar raha hai.", emoji: "🔍" },
-    { step: 2, title: "Clip Banao", desc: "Creator ka long video lo, 30-60 sec ka viral clip banao CapCut se.", emoji: "✂️" },
-    { step: 3, title: "Paisa Kamao", desc: "Link submit karo, views aao, ₹ aao — seedha UPI pe.", emoji: "💰" },
+    { step: 1, title: "Campaign Dhundho", desc: "Browse active campaigns, dekho kaun kitna pay kar raha hai.", emoji: <Search className="w-5 h-5" /> },
+    { step: 2, title: "Clip Banao", desc: "Creator ka long video lo, 30-60 sec ka viral clip banao CapCut se.", emoji: <Scissors className="w-5 h-5" /> },
+    { step: 3, title: "Paisa Kamao", desc: "Link submit karo, views aao, ₹ aao — seedha UPI pe.", emoji: <IndianRupee className="w-5 h-5" /> },
   ]
 
   const creatorSteps = [
-    { step: 1, title: "Campaign Banao", desc: "Apna video upload karo, bounty set karo.", emoji: "📢" },
-    { step: 2, title: "Clippers Kaam Karein", desc: "Hazaron clippers aapke clips viral karenge.", emoji: "👥" },
-    { step: 3, title: "Views Aayein", desc: "Free mein viral ho, sirf views pe pay karo.", emoji: "📈" },
+    { step: 1, title: "Campaign Banao", desc: "Apna video upload karo, bounty set karo.", emoji: <Megaphone className="w-5 h-5" /> },
+    { step: 2, title: "Clippers Kaam Karein", desc: "Hazaron clippers aapke clips viral karenge.", emoji: <Users className="w-5 h-5" /> },
+    { step: 3, title: "Views Aayein", desc: "Free mein viral ho, sirf views pe pay karo.", emoji: <TrendingUp className="w-5 h-5" /> },
   ]
 
   const steps = tab === "clipper" ? clipperSteps : creatorSteps
@@ -314,7 +315,7 @@ function ActiveCampaignsSection({ campaigns }: { campaigns: CampaignCard[] }) {
 
         <div className="mt-8 text-center">
           <Link href="/dashboard/clipper" className="inline-block rounded-lg bg-emerald-600 px-8 py-3 text-sm font-medium text-white hover:bg-emerald-700 transition-colors">
-            Sabhi Campaigns Dekho →
+            Sabhi Campaigns Dekho <ArrowRight className="w-4 h-4 inline" />
           </Link>
         </div>
       </div>
@@ -333,13 +334,13 @@ function ForCreatorsSection() {
 
         <div className="mt-12 grid gap-6 md:grid-cols-4">
           {[
-            { title: "Sirf Results Pe Pay Karo", desc: "Views aayein tabhi paise jaayein.", emoji: "🎯" },
-            { title: "Army of Clippers", desc: "Hazaron editors aapka content viral karenge.", emoji: "👥" },
-            { title: "Zero Effort", desc: "Aapko kuch nahi karna, bas video do.", emoji: "😌" },
-            { title: "Full Analytics", desc: "Dekho kaun sa clip viral hua.", emoji: "📊" },
+            { title: "Sirf Results Pe Pay Karo", desc: "Views aayein tabhi paise jaayein.", emoji: <Target className="w-5 h-5" /> },
+            { title: "Army of Clippers", desc: "Hazaron editors aapka content viral karenge.", emoji: <Users className="w-5 h-5" /> },
+            { title: "Zero Effort", desc: "Aapko kuch nahi karna, bas video do.", emoji: <Smile className="w-5 h-5" /> },
+            { title: "Full Analytics", desc: "Dekho kaun sa clip viral hua.", emoji: <BarChart3 className="w-5 h-5" /> },
           ].map((b) => (
             <div key={b.title} className="rounded-xl border bg-white p-6 text-center shadow-sm">
-              <span className="text-3xl">{b.emoji}</span>
+              {b.emoji}
               <h3 className="mt-3 font-semibold">{b.title}</h3>
               <p className="mt-2 text-sm text-gray-500">{b.desc}</p>
             </div>
@@ -398,7 +399,7 @@ function TestimonialsSection() {
             >
               <div className="flex items-center gap-1">
                 {Array.from({ length: t.rating }).map((_, j) => (
-                  <span key={j} className="text-yellow-400">★</span>
+                  <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
               <p className="mt-3 text-sm leading-relaxed text-gray-600">{t.text}</p>
@@ -430,7 +431,7 @@ function FAQSection() {
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
               >
                 {faq.q}
-                <span className={`text-gray-400 transition-transform ${openIndex === i ? "rotate-180" : ""}`}>▼</span>
+                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${openIndex === i ? "rotate-180" : ""}`} />
               </button>
               {openIndex === i && (
                 <div className="border-t px-4 pb-4 pt-3 text-sm text-gray-600 leading-relaxed">
@@ -471,7 +472,7 @@ function Footer() {
         <div className="grid gap-8 md:grid-cols-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-2xl">✂️</span>
+              <Scissors className="w-5 h-5" />
               <span className="text-lg font-bold text-white">ClipKaro</span>
             </div>
             <p className="mt-3 text-sm">India ka pehla clipping platform. Clips banao, views kamao, ₹ kamao.</p>
@@ -507,7 +508,7 @@ function Footer() {
         </div>
 
         <div className="mt-10 border-t border-gray-800 pt-6 text-center text-sm">
-          <p>Made in India 🇮🇳 — © 2024 ClipKaro. All rights reserved.</p>
+          <p>Made in India — © 2024 ClipKaro. All rights reserved.</p>
         </div>
       </div>
     </footer>

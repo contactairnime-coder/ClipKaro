@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
+import { Clock, IndianRupee, Video } from "lucide-react"
 
 type Campaign = {
   id: string
@@ -88,56 +90,87 @@ export default function BrowseCampaigns() {
       </div>
 
       {loading ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i}>
-              <CardContent className="h-48 animate-pulse bg-muted/50" />
-            </Card>
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05, duration: 0.3 }}
+            >
+              <Card>
+                <CardContent className="h-48 animate-pulse bg-muted/50" />
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       ) : campaigns.length === 0 ? (
-        <Card>
-          <CardContent className="py-16 text-center">
-            <p className="text-lg font-medium">No campaigns found</p>
-            <p className="mt-1 text-sm text-muted-foreground">Check back later for new opportunities.</p>
-          </CardContent>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Card>
+            <CardContent className="py-16 text-center">
+              <p className="text-lg font-medium">No campaigns found</p>
+              <p className="mt-1 text-sm text-muted-foreground">Check back later for new opportunities.</p>
+            </CardContent>
+          </Card>
+        </motion.div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {campaigns.map((campaign) => (
-            <Card key={campaign.id} className="flex flex-col">
-              <div className="aspect-video w-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <p className="text-3xl font-bold text-primary">₹{campaign.bountyPerLakhViews}</p>
-              </div>
-              <CardHeader className="pb-2">
-                <div className="flex items-start justify-between">
-                  <CardTitle className="text-base">{campaign.title}</CardTitle>
+        <motion.div
+          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          {campaigns.map((campaign, index) => (
+            <motion.div
+              key={campaign.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
+              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+            >
+              <Card className="flex flex-col">
+                <div className="aspect-video w-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                  <p className="text-3xl font-bold text-primary">₹{campaign.bountyPerLakhViews}</p>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  by {campaign.creator.creatorProfile?.channelName || campaign.creator.name || "Unknown"}
-                </p>
-              </CardHeader>
-              <CardContent className="flex-1">
-                <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">{campaign.description}</p>
-                <div className="mb-3 flex flex-wrap gap-1">
-                  {campaign.allowedPlatforms.map((p) => (
-                    <Badge key={p} variant="secondary" className="text-xs">
-                      {platformIcons[p] || p}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="mb-4 space-y-1 text-xs text-muted-foreground">
-                  <p>⏱ {campaign.minClipDuration}-{campaign.maxClipDuration}s</p>
-                  <p>💰 ₹{campaign.remainingBounty.toLocaleString()} remaining</p>
-                  <p>📹 {campaign._count.submissions} submissions</p>
-                </div>
-                <Link href={`/dashboard/clipper/campaigns/${campaign.id}`}>
-                  <Button className="w-full" size="sm">View Campaign</Button>
-                </Link>
-              </CardContent>
-            </Card>
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between">
+                    <CardTitle className="text-base">{campaign.title}</CardTitle>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    by {campaign.creator.creatorProfile?.channelName || campaign.creator.name || "Unknown"}
+                  </p>
+                </CardHeader>
+                <CardContent className="flex-1">
+                  <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">{campaign.description}</p>
+                  <div className="mb-3 flex flex-wrap gap-1">
+                    {campaign.allowedPlatforms.map((p) => (
+                      <Badge key={p} variant="secondary" className="text-xs">
+                        {platformIcons[p] || p}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="mb-4 space-y-1 text-xs text-muted-foreground">
+                    <p className="flex items-center gap-1"><Clock className="w-4 h-4" /> {campaign.minClipDuration}-{campaign.maxClipDuration}s</p>
+                    <p className="flex items-center gap-1"><IndianRupee className="w-4 h-4" /> ₹{campaign.remainingBounty.toLocaleString()} remaining</p>
+                    <p className="flex items-center gap-1"><Video className="w-4 h-4" /> {campaign._count.submissions} submissions</p>
+                  </div>
+                  <Link href={`/dashboard/clipper/campaigns/${campaign.id}`}>
+                    <Button className="w-full" size="sm">View Campaign</Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   )

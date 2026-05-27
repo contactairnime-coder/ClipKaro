@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -105,10 +106,10 @@ export default function AdminUsers() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.filter((u) => u.role === role).map((u) => {
+                    {filtered.filter((u) => u.role === role).map((u, index) => {
                       const isBanned = bannedIds.has(u.id)
                       return (
-                        <tr key={u.id} className="border-b last:border-0">
+                        <motion.tr key={u.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05, duration: 0.3 }} className="border-b last:border-0">
                           <td className="py-3 font-medium">{u.name || "—"}</td>
                           <td className="py-3">{u.email}</td>
                           <td className="py-3 text-muted-foreground">{new Date(u.createdAt).toLocaleDateString()}</td>
@@ -139,7 +140,7 @@ export default function AdminUsers() {
                               )}
                             </div>
                           </td>
-                        </tr>
+                        </motion.tr>
                       )
                     })}
                   </tbody>

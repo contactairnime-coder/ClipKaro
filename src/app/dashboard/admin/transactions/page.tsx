@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -57,20 +58,26 @@ export default function AdminTransactions() {
         <p className="text-muted-foreground">All platform financial activity</p>
       </div>
 
-      <div className="mb-6 grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Platform Revenue</CardTitle></CardHeader>
-          <CardContent><p className="text-2xl font-bold text-green-600">₹{totalRevenue.toLocaleString()}</p></CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Clipper Earnings</CardTitle></CardHeader>
-          <CardContent><p className="text-2xl font-bold">₹{totalEarnings.toLocaleString()}</p></CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Withdrawals</CardTitle></CardHeader>
-          <CardContent><p className="text-2xl font-bold text-red-600">₹{totalPayouts.toLocaleString()}</p></CardContent>
-        </Card>
-      </div>
+      <motion.div className="mb-6 grid gap-4 md:grid-cols-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0, duration: 0.4 }}>
+          <Card>
+            <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Platform Revenue</CardTitle></CardHeader>
+            <CardContent><p className="text-2xl font-bold text-green-600">₹{totalRevenue.toLocaleString()}</p></CardContent>
+          </Card>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4 }}>
+          <Card>
+            <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Clipper Earnings</CardTitle></CardHeader>
+            <CardContent><p className="text-2xl font-bold">₹{totalEarnings.toLocaleString()}</p></CardContent>
+          </Card>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4 }}>
+          <Card>
+            <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Withdrawals</CardTitle></CardHeader>
+            <CardContent><p className="text-2xl font-bold text-red-600">₹{totalPayouts.toLocaleString()}</p></CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
 
       <div className="mb-4">
         <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v === "all" || !v ? "" : v)}>
@@ -102,14 +109,14 @@ export default function AdminTransactions() {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((tx) => (
-                <tr key={tx.id} className="border-b last:border-0">
+              {transactions.map((tx, index) => (
+                <motion.tr key={tx.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05, duration: 0.3 }} className="border-b last:border-0">
                   <td className="py-3">{typeLabels[tx.type] || tx.type}</td>
                   <td className="py-3">{tx.user.name || tx.user.email}</td>
                   <td className="py-3 font-medium">₹{tx.amount.toLocaleString()}</td>
                   <td className="py-3 text-muted-foreground">{tx.referenceId ? tx.referenceId.slice(0, 12) + "..." : "—"}</td>
                   <td className="py-3 text-muted-foreground">{new Date(tx.createdAt).toLocaleDateString()}</td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>

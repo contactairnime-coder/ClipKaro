@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -159,102 +160,131 @@ export default function AddFundsPage() {
         <p className="text-muted-foreground">Add money to your ClipKaro wallet for campaign bounties</p>
       </div>
 
-      <div className="mb-8 grid gap-6 md:grid-cols-2">
+      <motion.div
+        className="mb-8 grid gap-6 md:grid-cols-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          <Card>
+            <CardHeader><CardTitle>Current Balance</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-4xl font-bold">₹{balance.toLocaleString()}</p>
+              <p className="mt-1 text-sm text-muted-foreground">Available for campaigns</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
+          <Card>
+            <CardHeader><CardTitle>Add Money</CardTitle></CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <label className="mb-2 block text-sm font-medium">Enter Amount (₹)</label>
+                <Input
+                  type="number"
+                  min={1000}
+                  step={100}
+                  placeholder="Enter amount (min ₹1,000)"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </div>
+              <div className="mb-4 flex flex-wrap gap-2">
+                {presetAmounts.map((preset) => (
+                  <Button
+                    key={preset}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setAmount(String(preset))}
+                  >
+                    ₹{preset.toLocaleString()}
+                  </Button>
+                ))}
+              </div>
+              {amount && Number(amount) >= 1000 && (
+                <div className="mb-4 rounded-lg bg-muted p-3 text-sm">
+                  <div className="flex justify-between">
+                    <span>Bounty Amount</span>
+                    <span>₹{Number(amount).toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Platform Fee (15%)</span>
+                    <span>₹{Math.round(Number(amount) * 0.15).toLocaleString()}</span>
+                  </div>
+                  <div className="mt-1 flex justify-between font-semibold border-t pt-1">
+                    <span>Total</span>
+                    <span>₹{(Number(amount) + Math.round(Number(amount) * 0.15)).toLocaleString()}</span>
+                  </div>
+                </div>
+              )}
+              <Button
+                className="w-full"
+                size="lg"
+                disabled={processing || !amount || Number(amount) < 1000 || !scriptLoaded}
+                onClick={handlePayment}
+              >
+                {processing ? "Processing..." : "Pay with Razorpay"}
+              </Button>
+              {!scriptLoaded && (
+                <p className="mt-2 text-xs text-muted-foreground">Loading payment gateway...</p>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
         <Card>
-          <CardHeader><CardTitle>Current Balance</CardTitle></CardHeader>
+          <CardHeader><CardTitle>Transaction History</CardTitle></CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold">₹{balance.toLocaleString()}</p>
-            <p className="mt-1 text-sm text-muted-foreground">Available for campaigns</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader><CardTitle>Add Money</CardTitle></CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <label className="mb-2 block text-sm font-medium">Enter Amount (₹)</label>
-              <Input
-                type="number"
-                min={1000}
-                step={100}
-                placeholder="Enter amount (min ₹1,000)"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-              />
-            </div>
-            <div className="mb-4 flex flex-wrap gap-2">
-              {presetAmounts.map((preset) => (
-                <Button
-                  key={preset}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setAmount(String(preset))}
-                >
-                  ₹{preset.toLocaleString()}
-                </Button>
-              ))}
-            </div>
-            {amount && Number(amount) >= 1000 && (
-              <div className="mb-4 rounded-lg bg-muted p-3 text-sm">
-                <div className="flex justify-between">
-                  <span>Bounty Amount</span>
-                  <span>₹{Number(amount).toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Platform Fee (15%)</span>
-                  <span>₹{Math.round(Number(amount) * 0.15).toLocaleString()}</span>
-                </div>
-                <div className="mt-1 flex justify-between font-semibold border-t pt-1">
-                  <span>Total</span>
-                  <span>₹{(Number(amount) + Math.round(Number(amount) * 0.15)).toLocaleString()}</span>
-                </div>
+            {transactions.length === 0 ? (
+              <p className="py-8 text-center text-muted-foreground">No transactions yet.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b text-left">
+                      <th className="pb-3 font-medium">Date</th>
+                      <th className="pb-3 font-medium">Type</th>
+                      <th className="pb-3 font-medium">Amount</th>
+                      <th className="pb-3 font-medium">Reference</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.map((tx, index) => (
+                      <motion.tr
+                        key={tx.id}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05, duration: 0.3 }}
+                        className="border-b last:border-0"
+                      >
+                        <td className="py-3">{new Date(tx.createdAt).toLocaleDateString()}</td>
+                        <td className="py-3">{tx.type.replace(/_/g, " ")}</td>
+                        <td className="py-3">₹{tx.amount.toLocaleString()}</td>
+                        <td className="py-3 text-muted-foreground">{tx.referenceId ? tx.referenceId.slice(0, 8) + "..." : "-"}</td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
-            <Button
-              className="w-full"
-              size="lg"
-              disabled={processing || !amount || Number(amount) < 1000 || !scriptLoaded}
-              onClick={handlePayment}
-            >
-              {processing ? "Processing..." : "Pay with Razorpay"}
-            </Button>
-            {!scriptLoaded && (
-              <p className="mt-2 text-xs text-muted-foreground">Loading payment gateway...</p>
-            )}
           </CardContent>
         </Card>
-      </div>
-
-      <Card>
-        <CardHeader><CardTitle>Transaction History</CardTitle></CardHeader>
-        <CardContent>
-          {transactions.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">No transactions yet.</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="pb-3 font-medium">Date</th>
-                    <th className="pb-3 font-medium">Type</th>
-                    <th className="pb-3 font-medium">Amount</th>
-                    <th className="pb-3 font-medium">Reference</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((tx) => (
-                    <tr key={tx.id} className="border-b last:border-0">
-                      <td className="py-3">{new Date(tx.createdAt).toLocaleDateString()}</td>
-                      <td className="py-3">{tx.type.replace(/_/g, " ")}</td>
-                      <td className="py-3">₹{tx.amount.toLocaleString()}</td>
-                      <td className="py-3 text-muted-foreground">{tx.referenceId ? tx.referenceId.slice(0, 8) + "..." : "-"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      </motion.div>
     </div>
   )
 }

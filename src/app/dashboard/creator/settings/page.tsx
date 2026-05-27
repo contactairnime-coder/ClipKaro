@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -54,24 +55,36 @@ export default function CreatorSettings() {
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
-        <Card>
-          <CardHeader><CardTitle>Profile</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Name</label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">UPI ID</label>
-              <Input value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="yourname@paytm" />
-              <p className="text-xs text-muted-foreground">Used for withdrawals</p>
-            </div>
-          </CardContent>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Card>
+            <CardHeader><CardTitle>Profile</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Name</label>
+                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">UPI ID</label>
+                <Input value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="yourname@paytm" />
+                <p className="text-xs text-muted-foreground">Used for withdrawals</p>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Button type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Save Changes"}
-        </Button>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          <Button type="submit" disabled={saving}>
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
+        </motion.div>
       </form>
     </div>
   )

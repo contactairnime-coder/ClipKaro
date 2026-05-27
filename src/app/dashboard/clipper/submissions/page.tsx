@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -105,16 +106,43 @@ export default function MySubmissions() {
       </div>
 
       {loading ? (
-        <div className="space-y-3">{[1, 2, 3].map((i) => <div key={i} className="h-16 animate-pulse rounded-lg bg-muted" />)}</div>
+        <motion.div
+          className="space-y-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          {[1, 2, 3].map((i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05, duration: 0.3 }}
+            >
+              <div className="h-16 animate-pulse rounded-lg bg-muted" />
+            </motion.div>
+          ))}
+        </motion.div>
       ) : submissions.length === 0 ? (
-        <Card>
-          <CardContent className="py-16 text-center">
-            <p className="text-lg font-medium">No submissions yet</p>
-            <p className="text-sm text-muted-foreground">Browse campaigns and submit your first clip.</p>
-          </CardContent>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Card>
+            <CardContent className="py-16 text-center">
+              <p className="text-lg font-medium">No submissions yet</p>
+              <p className="text-sm text-muted-foreground">Browse campaigns and submit your first clip.</p>
+            </CardContent>
+          </Card>
+        </motion.div>
       ) : (
-        <div className="overflow-x-auto">
+        <motion.div
+          className="overflow-x-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b text-left">
@@ -129,8 +157,14 @@ export default function MySubmissions() {
               </tr>
             </thead>
             <tbody>
-              {submissions.map((sub) => (
-                <tr key={sub.id} className="border-b last:border-0">
+              {submissions.map((sub, index) => (
+                <motion.tr
+                  key={sub.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  className="border-b last:border-0"
+                >
                   <td className="py-3 font-medium">{sub.campaign.title}</td>
                   <td className="py-3">
                     <a href={sub.submittedUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
@@ -160,11 +194,11 @@ export default function MySubmissions() {
                       </Button>
                     )}
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </motion.div>
       )}
     </div>
   )

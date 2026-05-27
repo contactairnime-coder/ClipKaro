@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -111,26 +112,38 @@ export default function EarningsPage() {
         <p className="text-muted-foreground">Track your earnings and request payouts</p>
       </div>
 
-      <div className="mb-8 grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total Earned</CardTitle></CardHeader>
-          <CardContent><p className="text-2xl font-bold">₹{(data?.totalEarned || 0).toLocaleString()}</p></CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Available Balance</CardTitle></CardHeader>
-          <CardContent><p className="text-2xl font-bold text-green-600">₹{availableBalance.toLocaleString()}</p></CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Pending</CardTitle></CardHeader>
-          <CardContent><p className="text-2xl font-bold text-yellow-600">₹{(data?.pendingEarnings || 0).toLocaleString()}</p></CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Withdrawn</CardTitle></CardHeader>
-          <CardContent><p className="text-2xl font-bold">₹{(data?.totalWithdrawn || 0).toLocaleString()}</p></CardContent>
-        </Card>
-      </div>
+      <motion.div
+        className="mb-8 grid gap-4 md:grid-cols-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        {[
+          { title: "Total Earned", value: `₹${(data?.totalEarned || 0).toLocaleString()}`, className: "" },
+          { title: "Available Balance", value: `₹${availableBalance.toLocaleString()}`, className: "text-green-600" },
+          { title: "Pending", value: `₹${(data?.pendingEarnings || 0).toLocaleString()}`, className: "text-yellow-600" },
+          { title: "Withdrawn", value: `₹${(data?.totalWithdrawn || 0).toLocaleString()}`, className: "" },
+        ].map((stat, index) => (
+          <motion.div
+            key={stat.title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1, duration: 0.4 }}
+          >
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">{stat.title}</CardTitle></CardHeader>
+              <CardContent><p className={`text-2xl font-bold ${stat.className}`}>{stat.value}</p></CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
 
-      <div className="mb-8 grid gap-6 lg:grid-cols-2">
+      <motion.div
+        className="mb-8 grid gap-6 lg:grid-cols-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
         <Card>
           <CardHeader><CardTitle>Withdraw Funds</CardTitle></CardHeader>
           <CardContent>
@@ -173,8 +186,14 @@ export default function EarningsPage() {
               <p className="py-4 text-center text-sm text-muted-foreground">No withdrawals yet</p>
             ) : (
               <div className="space-y-2">
-                {payouts.map((p) => (
-                  <div key={p.id} className="flex items-center justify-between rounded-lg border p-3 text-sm">
+                {payouts.map((p, index) => (
+                  <motion.div
+                    key={p.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05, duration: 0.3 }}
+                    className="flex items-center justify-between rounded-lg border p-3 text-sm"
+                  >
                     <div>
                       <p className="font-medium">₹{p.amount.toLocaleString()}</p>
                       <p className="text-xs text-muted-foreground">{p.upiId}</p>
@@ -183,51 +202,63 @@ export default function EarningsPage() {
                       <Badge className={`${payoutStatusColors[p.status]}`}>{p.status}</Badge>
                       <p className="mt-1 text-xs text-muted-foreground">{new Date(p.createdAt).toLocaleDateString()}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             )}
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
-      <Card>
-        <CardHeader><CardTitle>Earnings History</CardTitle></CardHeader>
-        <CardContent>
-          {data?.history.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">No earnings yet</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="pb-3 font-medium">Campaign</th>
-                    <th className="pb-3 font-medium">Views</th>
-                    <th className="pb-3 font-medium">Amount</th>
-                    <th className="pb-3 font-medium">Status</th>
-                    <th className="pb-3 font-medium">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data?.history.map((h) => (
-                    <tr key={h.id} className="border-b last:border-0">
-                      <td className="py-3">{h.campaign.title}</td>
-                      <td className="py-3">{h.viewCount.toLocaleString()}</td>
-                      <td className="py-3">₹{h.earningsCalculated}</td>
-                      <td className="py-3">
-                        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${payoutStatusColors[h.status] || ""}`}>
-                          {h.status}
-                        </span>
-                      </td>
-                      <td className="py-3 text-muted-foreground">{new Date(h.createdAt).toLocaleDateString()}</td>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
+        <Card>
+          <CardHeader><CardTitle>Earnings History</CardTitle></CardHeader>
+          <CardContent>
+            {data?.history.length === 0 ? (
+              <p className="py-8 text-center text-muted-foreground">No earnings yet</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b text-left">
+                      <th className="pb-3 font-medium">Campaign</th>
+                      <th className="pb-3 font-medium">Views</th>
+                      <th className="pb-3 font-medium">Amount</th>
+                      <th className="pb-3 font-medium">Status</th>
+                      <th className="pb-3 font-medium">Date</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                  </thead>
+                  <tbody>
+                    {data?.history.map((h, index) => (
+                      <motion.tr
+                        key={h.id}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05, duration: 0.3 }}
+                        className="border-b last:border-0"
+                      >
+                        <td className="py-3">{h.campaign.title}</td>
+                        <td className="py-3">{h.viewCount.toLocaleString()}</td>
+                        <td className="py-3">₹{h.earningsCalculated}</td>
+                        <td className="py-3">
+                          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${payoutStatusColors[h.status] || ""}`}>
+                            {h.status}
+                          </span>
+                        </td>
+                        <td className="py-3 text-muted-foreground">{new Date(h.createdAt).toLocaleDateString()}</td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   )
 }

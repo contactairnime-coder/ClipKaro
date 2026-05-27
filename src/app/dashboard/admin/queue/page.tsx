@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -64,9 +65,10 @@ export default function AdminQueue() {
         <Button variant="outline" onClick={() => window.location.reload()}>Refresh</Button>
       </div>
 
-      <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {Object.entries(data.queues).map(([key, queue]) => (
-          <Card key={key}>
+      <motion.div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        {Object.entries(data.queues).map(([key, queue], index) => (
+          <motion.div key={key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1, duration: 0.4 }} whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}>
+            <Card>
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm capitalize">{key.replace(/([A-Z])/g, " $1")}</CardTitle>
@@ -114,8 +116,9 @@ export default function AdminQueue() {
               )}
             </CardContent>
           </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   )
 }

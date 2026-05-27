@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { motion } from "framer-motion"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -73,44 +74,57 @@ function SignupForm() {
   if (success) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Check your email</CardTitle>
-            <CardDescription>
-              We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center">
-            <Button variant="outline" onClick={() => router.push("/login")}>
-              Go to login
-            </Button>
-          </CardContent>
-        </Card>
+        <motion.div
+          className="w-full max-w-md"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl">Check your email</CardTitle>
+              <CardDescription>
+                We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-center">
+              <Button variant="outline" onClick={() => router.push("/login")}>
+                Go to login
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
     )
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>Join ClipKaro and start earning</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-6">
-            <Label className="mb-2 block text-sm font-medium">I want to join as</Label>
-            <Tabs
-              defaultValue={role}
-              onValueChange={(v) => setRole(v as "CREATOR" | "CLIPPER")}
-              className="w-full"
-            >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="CLIPPER">Clipper</TabsTrigger>
-                <TabsTrigger value="CREATOR">Creator</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
+      <motion.div
+        className="w-full max-w-md"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card>
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Create an account</CardTitle>
+            <CardDescription>Join ClipKaro and start earning</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-6">
+              <Label className="mb-2 block text-sm font-medium">I want to join as</Label>
+              <Tabs
+                defaultValue={role}
+                onValueChange={(v) => setRole(v as "CREATOR" | "CLIPPER")}
+                className="w-full"
+              >
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="CLIPPER">Clipper</TabsTrigger>
+                  <TabsTrigger value="CREATOR">Creator</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
 
           <form onSubmit={handleSignup} className="space-y-4">
             <div className="space-y-2">
@@ -183,6 +197,7 @@ function SignupForm() {
           </p>
         </CardContent>
       </Card>
+      </motion.div>
     </div>
   )
 }

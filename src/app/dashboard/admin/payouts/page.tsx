@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -81,9 +82,10 @@ export default function AdminPayouts() {
             <Card><CardContent className="py-12 text-center text-muted-foreground">No pending payouts</CardContent></Card>
           ) : (
             <div className="space-y-3">
-              {pending.map((p) => (
-                <Card key={p.id}>
-                  <CardContent className="flex items-start justify-between p-4">
+              {pending.map((p, index) => (
+                <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1, duration: 0.4 }} whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}>
+                  <Card>
+                    <CardContent className="flex items-start justify-between p-4">
                     <div>
                       <p className="font-semibold">{p.clipper.name || p.clipper.email}</p>
                       <p className="text-sm text-muted-foreground">₹{p.amount.toLocaleString()} → {p.upiId}</p>
@@ -97,6 +99,7 @@ export default function AdminPayouts() {
                     </div>
                   </CardContent>
                 </Card>
+                </motion.div>
               ))}
             </div>
           )}
@@ -118,8 +121,8 @@ export default function AdminPayouts() {
                   </tr>
                 </thead>
                 <tbody>
-                  {history.map((p) => (
-                    <tr key={p.id} className="border-b last:border-0">
+                  {history.map((p, index) => (
+                    <motion.tr key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05, duration: 0.3 }} className="border-b last:border-0">
                       <td className="py-3">{p.clipper?.name || p.clipper?.email || "—"}</td>
                       <td className="py-3">₹{p.amount.toLocaleString()}</td>
                       <td className="py-3">{p.upiId}</td>
@@ -127,7 +130,7 @@ export default function AdminPayouts() {
                         <Badge className={statusColors[p.status]}>{p.status}</Badge>
                       </td>
                       <td className="py-3 text-muted-foreground">{new Date(p.createdAt).toLocaleDateString()}</td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>

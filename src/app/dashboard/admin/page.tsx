@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "sonner"
@@ -58,14 +59,16 @@ export default function AdminOverview() {
         <p className="text-muted-foreground">Platform statistics at a glance</p>
       </div>
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {statCards.map((s) => (
-          <Card key={s.label}>
-            <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">{s.label}</CardTitle></CardHeader>
-            <CardContent><p className="text-2xl font-bold">{s.value}</p></CardContent>
-          </Card>
+      <motion.div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        {statCards.map((s, index) => (
+          <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1, duration: 0.4 }}>
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">{s.label}</CardTitle></CardHeader>
+              <CardContent><p className="text-2xl font-bold">{s.value}</p></CardContent>
+            </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <div className="mb-8">
         <Card>
@@ -91,13 +94,14 @@ export default function AdminOverview() {
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader><CardTitle className="text-lg">Recent Signups</CardTitle></CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {activity?.profiles.map((p) => (
-                <div key={p.id} className="flex items-center justify-between rounded-lg border p-2 text-sm">
+      <motion.div className="grid gap-6 lg:grid-cols-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.4 }}>
+          <Card>
+            <CardHeader><CardTitle className="text-lg">Recent Signups</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {activity?.profiles.map((p) => (
+                  <div key={p.id} className="flex items-center justify-between rounded-lg border p-2 text-sm">
                   <span className="font-medium">{p.name || p.email}</span>
                   <span className="text-xs text-muted-foreground">{new Date(p.createdAt).toLocaleDateString()}</span>
                 </div>
@@ -106,8 +110,10 @@ export default function AdminOverview() {
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader><CardTitle className="text-lg">Recent Campaigns</CardTitle></CardHeader>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.4 }}>
+          <Card>
+            <CardHeader><CardTitle className="text-lg">Recent Campaigns</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-2">
               {activity?.campaigns.map((c) => (
@@ -120,8 +126,10 @@ export default function AdminOverview() {
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader><CardTitle className="text-lg">Recent Submissions</CardTitle></CardHeader>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.4 }}>
+          <Card>
+            <CardHeader><CardTitle className="text-lg">Recent Submissions</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-2">
               {activity?.submissions.map((s) => (
@@ -134,8 +142,10 @@ export default function AdminOverview() {
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader><CardTitle className="text-lg">Open Fraud Flags</CardTitle></CardHeader>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.4 }}>
+          <Card>
+            <CardHeader><CardTitle className="text-lg">Open Fraud Flags</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-2">
               {activity?.fraudFlags.map((f) => (
@@ -148,7 +158,8 @@ export default function AdminOverview() {
             </div>
           </CardContent>
         </Card>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -103,7 +104,7 @@ export default function FraudQueue() {
   if (loading) return <div className="h-64 animate-pulse rounded bg-muted" />
 
   return (
-    <div>
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Fraud Queue</h1>
         <p className="text-muted-foreground">{flags.length} unresolved flags</p>
@@ -118,12 +119,13 @@ export default function FraudQueue() {
         </Card>
       ) : (
         <div className="space-y-4">
-          {flags.map((flag) => {
+          {flags.map((flag, index) => {
             const results = fraudResults[flag.submission.id]
             const isChecking = checkingIds.has(flag.submission.id)
 
             return (
-              <Card key={flag.id} className="border-l-4 border-l-red-500">
+              <motion.div key={flag.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1, duration: 0.4 }} whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}>
+                <Card className="border-l-4 border-l-red-500">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -193,10 +195,11 @@ export default function FraudQueue() {
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
             )
           })}
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }
