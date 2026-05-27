@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  CREATOR
+  CLIPPER
+  ADMIN
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+enum SubmissionPlatform {
+  YOUTUBE_SHORTS
+  INSTAGRAM_REELS
+  TIKTOK
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+enum FraudFlagType {
+  VIEW_VELOCITY
+  ENGAGEMENT_RATIO
+  ACCOUNT_AGE
+  DUPLICATE
+  GEOGRAPHIC
+}
+
+enum TransactionType {
+  CREATOR_DEPOSIT
+  PLATFORM_FEE
+  CLIPPER_EARNING
+  WITHDRAWAL
+}
+
+model Profile {
+  id             String   @id @map("id")
+  email          String   @unique @map("email")
+  name           String?  @map("name")
+  avatar         String?  @map("avatar")
+  role           UserRole @default(CLIPPER) @map("role")
+  upiId          String?  @map("upi_id")
+  totalEarned    Float    @default(0) @map("total_earned")
+  totalWithdrawn Float    @default(0) @map("total_withdrawn")
+  isVerified     Boolean  @default(false) @map("is_verified")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  creatorProfile  CreatorProfile?
+  campaigns       Campaign[]
+  submissions     Submission[]
+  payouts         Payout[]
+  transactions    Transaction[]
+
+  @@map("profiles")
+}
+
+model CreatorProfile {
+  id               String  @id @default(cuid()) @map("id")
+  userId           String  @unique @map("user_id")
+  channelName      String? @map("channel_name")
+  youtubeChannelId String? @map("youtube_channel_id")
+  instagramHandle  String? @map("instagram_handle")
+  followerCount    Int     @default(0) @map("follower_count")
+  totalBountySpent Float   @default(0) @map("total_bounty_spent")
+  isApproved       Boolean @default(false) @map("is_approved")
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("creator_profiles")
+}
+
+model Campaign {
+  id                 String          @id @default(cuid()) @map("id")
+  title              String          @map("title")
+  description        String          @db.Text @map("description")
+  sourceVideoUrl     String          @map("source_video_url")
+  bountyTotal        Float           @default(0) @map("bounty_total")
+  bountyPerLakhViews Float           @default(0) @map("bounty_per_lakh_views")
+  platformFee        Float           @default(0) @map("platform_fee")
+  remainingBounty    Float           @default(0) @map("remaining_bounty")
+  status             CampaignStatus  @default(DRAFT) @map("status")
+  allowedPlatforms   String[]        @map("allowed_platforms")
+  minClipDuration    Int             @default(15) @map("min_clip_duration")
+  maxClipDuration    Int             @default(60) @map("max_clip_duration")
+  guidelines         String?         @db.Text @map("guidelines")
+  startDate          DateTime?       @map("start_date")
+  endDate            DateTime?       @map("end_date")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+
+  creatorId    String       @map("creator_id")
+  creator      Profile      @relation(fields: [creatorId], references: [id])
+  submissions  Submission[]
+
+  @@map("campaigns")
+}
+
+model Submission {
+  id                 String             @id @default(cuid()) @map("id")
+  submittedUrl       String             @map("submitted_url")
+  platform           SubmissionPlatform @map("platform")
+  status             SubmissionStatus   @default(PENDING) @map("status")
+  viewCount          Int                @default(0) @map("view_count")
+  lastSyncedAt       DateTime?          @map("last_synced_at")
+  earningsCalculated Float              @default(0) @map("earnings_calculated")
+  rejectionReason    String?            @map("rejection_reason")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+
+  campaignId String    @map("campaign_id")
+  campaign   Campaign  @relation(fields: [campaignId], references: [id])
+  clipperId  String    @map("clipper_id")
+  clipper    Profile   @relation(fields: [clipperId], references: [id])
+  snapshots  ViewSnapshot[]
+  fraudFlags FraudFlag[]
+
+  @@map("submissions")
+}
+
+model ViewSnapshot {
+  id           String   @id @default(cuid()) @map("id")
+  viewCount    Int      @map("view_count")
+  recordedAt   DateTime @default(now()) @map("recorded_at")
+
+  submissionId String     @map("submission_id")
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@map("view_snapshots")
+}
+
+model Payout {
+  id               String       @id @default(cuid()) @map("id")
+  amount           Float        @map("amount")
+  status           PayoutStatus @default(PENDING) @map("status")
+  upiId            String       @map("upi_id")
+  razorpayPayoutId String?      @map("razorpay_payout_id")
+  createdAt        DateTime     @default(now()) @map("created_at")
+  paidAt           DateTime?    @map("paid_at")
+
+  clipperId String  @map("clipper_id")
+  clipper   Profile @relation(fields: [clipperId], references: [id])
+
+  @@map("payouts")
+}
+
+model FraudFlag {
+  id         String        @id @default(cuid()) @map("id")
+  flagType   FraudFlagType @map("flag_type")
+  details    String?       @db.Text @map("details")
+  isResolved Boolean       @default(false) @map("is_resolved")
+  createdAt  DateTime      @default(now()) @map("created_at")
+
+  submissionId String     @map("submission_id")
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@map("fraud_flags")
+}
+
+model Transaction {
+  id          String          @id @default(cuid()) @map("id")
+  type        TransactionType @map("type")
+  amount      Float           @map("amount")
+  referenceId String?         @map("reference_id")
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  userId String  @map("user_id")
+  user   Profile @relation(fields: [userId], references: [id])
+
+  @@map("transactions")
+}

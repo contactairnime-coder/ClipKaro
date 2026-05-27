@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/sync-views",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/check-campaigns",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/process-payouts",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
