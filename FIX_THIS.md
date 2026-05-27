@@ -13,7 +13,7 @@
 | 1 | Signout: `NEXT_PUBLIC_APP_URL` missing on Vercel — redirect fails | ✅ Fixed |
 | 2 | Creator: analytics & settings pages missing — "not found" | ✅ Fixed |
 | 3 | Verification email link opens localhost:3000 instead of Vercel URL | ⏳ Fix: change Site URL in Supabase Dashboard → Authentication → Settings |
-|   |       | ⏳ |
+| 4 | Sign in with Google — "Unsupported provider: provider is not enabled" | ⏳ Fix: enable Google provider in Supabase Dashboard → Authentication → Providers + configure Google Cloud Console OAuth |
 
 ---
 
