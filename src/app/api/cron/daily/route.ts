@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { createAdminClient } from "@/lib/supabase/admin"
 import { prisma } from "@/lib/prisma"
 
 export async function GET(request: Request) {
@@ -36,7 +35,6 @@ export async function GET(request: Request) {
 
   // 3. Process payouts
   try {
-    const supabase = createAdminClient()
     const pendingPayouts = await prisma.payout.findMany({
       where: { status: "PENDING" },
       select: { id: true },
