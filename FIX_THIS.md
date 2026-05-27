@@ -21,7 +21,7 @@
 | 2 | Creator analytics/settings 404 | Created both pages |
 | 5 | Admin User Management: View dead, Ban no confirm | View → dialog with user details; Ban → confirm step + unban toggle + list refresh |
 | 6 | Clipper submission 403 (new signup profile not created) | Auth callback auto-creates profile from metadata; signup page no longer calls failed API |
-| 7 | Creator approve/reject buttons do nothing | Changed API to redirect back to campaign page after processing |
+| 7 | Creator approve/reject buttons do nothing | Changed API to use `redirect()` (same pattern as toggle-status, which works) |
 | 8 | Earnings UPI ID not pre-filled | Added profile fetch to auto-fill UPI input |
 | 9 | `/auth/complete-profile` only POST (405 on GET) | Replaced with proper page + new `/api/complete-profile` endpoint |
 | 10 | Ban API didn't update profile isVerified | Added `prisma.profile.update` for isVerified on ban/unban |
