@@ -25,6 +25,7 @@
 |---|-------|-----|
 | 1 | Signout crash | Added hardcoded fallback URL in signout route |
 | 2 | Creator analytics/settings 404 | Created both pages |
+| 6 | Earnings page UPI ID not auto-filling from saved profile | Added profile fetch to pre-fill UPI ID input |
 
 ---
 
