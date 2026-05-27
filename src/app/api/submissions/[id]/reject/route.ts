@@ -24,7 +24,8 @@ async function handleReject(request: Request, params: { id: string }) {
     data: { status: "REJECTED", rejectionReason: body.reason || null },
   })
 
-  return NextResponse.json(updated)
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || request.headers.get("origin") || "https://clip-karo-4wbs-qsw5cb71c-airnime.vercel.app"
+  return NextResponse.redirect(new URL(`/dashboard/creator/campaigns/${submission.campaignId}`, baseUrl))
 }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
