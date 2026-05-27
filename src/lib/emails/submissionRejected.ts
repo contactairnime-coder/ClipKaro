@@ -1,3 +1,5 @@
+import { sendEmail } from "./send"
+
 export type RejectionData = {
   clipperEmail: string
   clipperName: string
@@ -29,6 +31,9 @@ export function buildRejectionEmail(data: RejectionData) {
 
 export async function sendRejectionEmail(data: RejectionData) {
   const email = buildRejectionEmail(data)
-  console.log("[RejectionEmail] Would send email:", email.subject)
-  return email
+  return sendEmail({
+    to: data.clipperEmail,
+    subject: email.subject,
+    html: email.html,
+  })
 }

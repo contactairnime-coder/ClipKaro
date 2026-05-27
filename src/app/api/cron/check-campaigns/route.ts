@@ -2,9 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const secret = searchParams.get("secret")
-
+  const secret = request.headers.get("x-cron-secret") || request.headers.get("authorization")?.replace("Bearer ", "")
   if (secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: "Invalid secret" }, { status: 401 })
   }

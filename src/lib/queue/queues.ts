@@ -1,6 +1,11 @@
 import { Queue } from "bullmq"
 import { getRedisConnection } from "./redis"
 
+const defaultJobOptions = {
+  attempts: 3,
+  backoff: { type: "exponential" as const, delay: 2000 },
+}
+
 let viewSyncQueue: Queue
 let fraudCheckQueue: Queue
 let earningsQueue: Queue
@@ -8,7 +13,7 @@ let emailQueue: Queue
 let payoutQueue: Queue
 
 function getConnection() {
-  return { connection: getRedisConnection() }
+  return { connection: getRedisConnection(), defaultJobOptions }
 }
 
 export function getViewSyncQueue() {

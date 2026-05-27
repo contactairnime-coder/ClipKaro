@@ -19,8 +19,14 @@ export async function GET(request: Request) {
     }
     if (campaignId) where.campaignId = campaignId
 
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"))
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20")))
+    const skip = (page - 1) * limit
+
     const submissions = await prisma.submission.findMany({
       where,
+      skip,
+      take: limit,
       include: {
         campaign: {
           select: { id: true, title: true, bountyPerLakhViews: true },
@@ -29,7 +35,9 @@ export async function GET(request: Request) {
       orderBy: { createdAt: "desc" },
     })
 
-    return NextResponse.json(submissions)
+    const total = await prisma.submission.count({ where })
+
+    return NextResponse.json({ submissions, pagination: { page, limit, total } })
   } catch (error) {
     console.error("Get my submissions error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

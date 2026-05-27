@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getViewSyncQueue } from "../queues"
 
 export function startViewSyncScheduler() {
-  cron.schedule("0 */6 * * *", async () => {
+  cron.schedule("10 */6 * * *", async () => {
     console.log("[ViewSyncScheduler] Starting...")
 
     const submissions = await prisma.submission.findMany({
@@ -12,16 +12,18 @@ export function startViewSyncScheduler() {
         campaign: { status: "ACTIVE" },
       },
       select: { id: true },
-      take: 100,
+      take: 200,
       orderBy: { lastSyncedAt: "asc" },
     })
 
-    for (const sub of submissions) {
-      await getViewSyncQueue().add("view-sync", { submissionId: sub.id })
-    }
+    const jobs = submissions.map((sub) => ({
+      name: "view-sync",
+      data: { submissionId: sub.id },
+    }))
+    await getViewSyncQueue().addBulk(jobs)
 
-    console.log(`[ViewSyncScheduler] Queued ${submissions.length} submissions`)
+    console.log(`[ViewSyncScheduler] Queued ${jobs.length} submissions`)
   })
 
-  console.log("[ViewSyncScheduler] Scheduled every 6 hours")
+  console.log("[ViewSyncScheduler] Scheduled at :10 past every 6 hours")
 }

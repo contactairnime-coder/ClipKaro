@@ -11,5 +11,11 @@ export async function POST(request: Request, { params }: { params: { id: string 
     data: { status: "COMPLETED" },
   })
 
+  // Reject all pending submissions for this campaign
+  await prisma.submission.updateMany({
+    where: { campaignId: params.id, status: "PENDING" },
+    data: { status: "REJECTED", rejectionReason: "Campaign rejected by admin" },
+  })
+
   return NextResponse.json(campaign)
 }

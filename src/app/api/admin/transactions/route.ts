@@ -10,20 +10,27 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const type = searchParams.get("type")
 
+  const page = Math.max(1, parseInt(searchParams.get("page") || "1"))
+  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20")))
+  const skip = (page - 1) * limit
+
   const where: Prisma.TransactionWhereInput = {}
   if (type) where.type = type as TransactionType
 
   const transactions = await prisma.transaction.findMany({
     where,
+    skip,
+    take: limit,
     include: { user: { select: { id: true, name: true, email: true } } },
     orderBy: { createdAt: "desc" },
-    take: 100,
   })
+
+  const total = await prisma.transaction.count({ where })
 
   const summary = await prisma.transaction.groupBy({
     by: ["type"],
     _sum: { amount: true },
   })
 
-  return NextResponse.json({ transactions, summary })
+  return NextResponse.json({ transactions, summary, pagination: { page, limit, total } })
 }

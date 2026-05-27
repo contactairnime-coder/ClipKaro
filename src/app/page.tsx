@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 
@@ -20,54 +20,6 @@ const faqs = [
   { q: "Creator ban ne ke liye kya chahiye?", a: "Aapko bas apna YouTube/Instagram/TikTok channel chahiye. Koi minimum subscriber count nahi. Jo bhi creator hai, apna campaign bana sakta hai." },
   { q: "Kitne din mein paise milte hain?", a: "Withdraw request ke baad, admin verification hoti hai aur phir Razorpay ke through UPI par payment bhej di jaati hai. Aam taur par 2-3 working days lagte hain." },
   { q: "Koi bhi join kar sakta hai?", a: "Haan! India ka koi bhi video creator ya clipper join kar sakta hai. Bas aapke paas ek valid UPI ID hona chahiye payment receive karne ke liye." },
-]
-
-const testimonials = [
-  {
-    name: "Rahul Sharma",
-    city: "Delhi",
-    role: "Clipper",
-    text: "Maine socha nahi tha ki clipping se itna earn kar paunga. Roz 2-3 clips banata hoon aur ₹15-18k/month kama leta hoon. ClipKaro ne meri zindagi badal di!",
-    rating: 5,
-  },
-  {
-    name: "Priya Patel",
-    city: "Mumbai",
-    role: "Creator",
-    text: "Ek campaign launch kiya aur 50+ clippers ne mere content par clips banaye. 2 hafte mein 2 lakh views mile bina koi ads kharch kiye. Bahut powerful hai!",
-    rating: 5,
-  },
-  {
-    name: "Amit Kumar",
-    city: "Bangalore",
-    role: "Clipper",
-    text: "ClipKaro use karna bahut easy hai. Bas campaign dhundho, clip banao, submit karo. UI bahut simple hai aur payment bhi time pe aati hai.",
-    rating: 5,
-  },
-]
-
-const campaigns = [
-  {
-    creator: "Technical Guruji",
-    title: "Tech Reviews 2024 - Best Gadgets",
-    payout: "₹50/lakh views",
-    remaining: "₹25,000",
-    platforms: ["YOUTUBE_SHORTS", "INSTAGRAM_REELS"],
-  },
-  {
-    creator: "BB Ki Vines",
-    title: "Comedy Skits - Make Us Laugh!",
-    payout: "₹40/lakh views",
-    remaining: "₹18,000",
-    platforms: ["YOUTUBE_SHORTS", "INSTAGRAM_REELS", "TIKTOK"],
-  },
-  {
-    creator: "Khan Sir",
-    title: "Educational Clips - Study Tips",
-    payout: "₹35/lakh views",
-    remaining: "₹30,000",
-    platforms: ["YOUTUBE_SHORTS"],
-  },
 ]
 
 const platformIcons: Record<string, string> = {
@@ -131,7 +83,7 @@ function Navbar() {
   )
 }
 
-function HeroSection() {
+function HeroSection({ stats }: { stats: { totalPaid: number; clippers: number; activeCampaigns: number; minPayout: number } }) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50 to-white pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="mx-auto max-w-7xl px-4 text-center">
@@ -174,17 +126,22 @@ function HeroSection() {
           transition={{ duration: 0.6, delay: 0.45 }}
           className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4"
         >
-          {[
-            { value: "₹50,000+", label: "Paid Out" },
-            { value: "100+", label: "Active Clippers" },
-            { value: "20+", label: "Creator Campaigns" },
-            { value: "₹500", label: "Minimum Payout" },
-          ].map((stat) => (
-            <div key={stat.label} className="rounded-xl bg-white p-4 shadow-sm border">
-              <p className="text-2xl font-bold text-emerald-600">{stat.value}</p>
-              <p className="text-sm text-gray-500">{stat.label}</p>
-            </div>
-          ))}
+          <div className="rounded-xl bg-white p-4 shadow-sm border">
+            <p className="text-2xl font-bold text-emerald-600">₹{stats.totalPaid.toLocaleString()}+</p>
+            <p className="text-sm text-gray-500">Paid Out</p>
+          </div>
+          <div className="rounded-xl bg-white p-4 shadow-sm border">
+            <p className="text-2xl font-bold text-emerald-600">{stats.clippers}+</p>
+            <p className="text-sm text-gray-500">Active Clippers</p>
+          </div>
+          <div className="rounded-xl bg-white p-4 shadow-sm border">
+            <p className="text-2xl font-bold text-emerald-600">{stats.activeCampaigns}+</p>
+            <p className="text-sm text-gray-500">Active Campaigns</p>
+          </div>
+          <div className="rounded-xl bg-white p-4 shadow-sm border">
+            <p className="text-2xl font-bold text-emerald-600">₹{stats.minPayout}</p>
+            <p className="text-sm text-gray-500">Minimum Payout</p>
+          </div>
         </motion.div>
       </div>
 
@@ -288,7 +245,7 @@ function EarningsCalculatorSection() {
             <div className="rounded-lg bg-emerald-50 p-4 text-center">
               <p className="text-sm text-gray-600">Monthly Earning Estimate</p>
               <p className="text-4xl font-bold text-emerald-600">₹{Math.round(monthlyEarnings).toLocaleString()}/month</p>
-              <p className="mt-1 text-xs text-gray-400">Top clippers earn ₹50,000+/month 🚀</p>
+              <p className="mt-1 text-xs text-gray-400">Top clippers earn ₹50,000+/month</p>
             </div>
           </div>
 
@@ -313,43 +270,47 @@ function EarningsCalculatorSection() {
   )
 }
 
-function ActiveCampaignsSection() {
+function ActiveCampaignsSection({ campaigns }: { campaigns: CampaignCard[] }) {
   return (
     <section className="scroll-mt-20 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4">
         <h2 className="text-center text-3xl font-bold md:text-4xl">Abhi Available Campaigns</h2>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {campaigns.map((c, i) => (
-            <motion.div
-              key={c.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15 }}
-              className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
-                  {c.creator.charAt(0)}
+        {campaigns.length === 0 ? (
+          <p className="mt-10 text-center text-gray-500">No active campaigns right now. Be the first to join!</p>
+        ) : (
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {campaigns.map((c, i) => (
+              <motion.div
+                key={c.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
+                    {(c.creatorName || "C").charAt(0)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{c.creatorName || "Creator"}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium">{c.creator}</p>
+                <h3 className="mt-4 font-semibold line-clamp-2">{c.title}</h3>
+                <p className="mt-2 text-2xl font-bold text-emerald-600">₹{c.bountyPerLakhViews}/lakh views</p>
+                <div className="mt-3 flex items-center justify-between text-sm text-gray-500">
+                  <span>Remaining: ₹{c.remainingBounty.toLocaleString()}</span>
+                  <div className="flex gap-1">
+                    {c.platforms.map((p) => (
+                      <span key={p} className="text-xs">{platformIcons[p] || p}</span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <h3 className="mt-4 font-semibold">{c.title}</h3>
-              <p className="mt-2 text-2xl font-bold text-emerald-600">{c.payout}</p>
-              <div className="mt-3 flex items-center justify-between text-sm text-gray-500">
-                <span>Remaining: {c.remaining}</span>
-                <div className="flex gap-1">
-                  {c.platforms.map((p) => (
-                    <span key={p} className="text-xs">{platformIcons[p]}</span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         <div className="mt-8 text-center">
           <Link href="/dashboard/clipper" className="inline-block rounded-lg bg-emerald-600 px-8 py-3 text-sm font-medium text-white hover:bg-emerald-700 transition-colors">
@@ -396,6 +357,30 @@ function ForCreatorsSection() {
 }
 
 function TestimonialsSection() {
+  const testimonials = [
+    {
+      name: "Rahul Sharma",
+      city: "Delhi",
+      role: "Clipper",
+      text: "Maine socha nahi tha ki clipping se itna earn kar paunga. Roz 2-3 clips banata hoon aur ₹15-18k/month kama leta hoon. ClipKaro ne meri zindagi badal di!",
+      rating: 5,
+    },
+    {
+      name: "Priya Patel",
+      city: "Mumbai",
+      role: "Creator",
+      text: "Ek campaign launch kiya aur 50+ clippers ne mere content par clips banaye. 2 hafte mein 2 lakh views mile bina koi ads kharch kiye. Bahut powerful hai!",
+      rating: 5,
+    },
+    {
+      name: "Amit Kumar",
+      city: "Bangalore",
+      role: "Clipper",
+      text: "ClipKaro use karna bahut easy hai. Bas campaign dhundho, clip banao, submit karo. UI bahut simple hai aur payment bhi time pe aati hai.",
+      rating: 5,
+    },
+  ]
+
   return (
     <section className="scroll-mt-20 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4">
@@ -530,14 +515,30 @@ function Footer() {
 }
 
 export default function Home() {
+  const [stats, setStats] = useState({ totalPaid: 0, clippers: 0, activeCampaigns: 0, minPayout: 500 })
+  const [campaigns, setCampaigns] = useState<CampaignCard[]>([])
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then((r) => r.json())
+      .then(setStats)
+      .catch(() => {})
+    fetch("/api/campaigns")
+      .then((r) => r.json())
+      .then((data) => {
+        setCampaigns(data.slice(0, 3).map(mapCampaign))
+      })
+      .catch(() => {})
+  }, [])
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
       <main>
-        <HeroSection />
+        <HeroSection stats={stats} />
         <HowItWorksSection />
         <EarningsCalculatorSection />
-        <ActiveCampaignsSection />
+        <ActiveCampaignsSection campaigns={campaigns} />
         <ForCreatorsSection />
         <TestimonialsSection />
         <FAQSection />
@@ -546,4 +547,25 @@ export default function Home() {
       <Footer />
     </div>
   )
+}
+
+interface CampaignCard {
+  id: string
+  title: string
+  bountyPerLakhViews: number
+  remainingBounty: number
+  platforms: string[]
+  creatorName: string | null
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapCampaign(raw: any): CampaignCard {
+  return {
+    id: raw.id,
+    title: raw.title,
+    bountyPerLakhViews: raw.bountyPerLakhViews,
+    remainingBounty: raw.remainingBounty,
+    platforms: raw.allowedPlatforms || [],
+    creatorName: raw.creator?.name || raw.creator?.creatorProfile?.channelName || null,
+  }
 }

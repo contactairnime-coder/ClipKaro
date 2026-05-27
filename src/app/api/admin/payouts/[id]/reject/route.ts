@@ -12,16 +12,16 @@ export async function POST(request: Request, { params }: { params: { id: string 
     return NextResponse.json({ error: "Payout already processed" }, { status: 400 })
   }
 
-  const [updated] = await prisma.$transaction([
+  await prisma.$transaction([
     prisma.payout.update({
       where: { id: params.id },
-      data: { status: "PAID", paidAt: new Date() },
+      data: { status: "FAILED" },
     }),
-    prisma.submission.updateMany({
-      where: { clipperId: payout.clipperId, status: "APPROVED" },
-      data: { status: "PAID" },
+    prisma.profile.update({
+      where: { id: payout.clipperId },
+      data: { totalWithdrawn: { decrement: payout.amount } },
     }),
   ])
 
-  return NextResponse.json(updated)
+  return NextResponse.json({ success: true })
 }

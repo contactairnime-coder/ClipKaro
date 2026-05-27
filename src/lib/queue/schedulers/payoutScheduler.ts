@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getPayoutQueue } from "../queues"
 
 export function startPayoutScheduler() {
-  cron.schedule("0 0 * * *", async () => {
+  cron.schedule("30 0 * * *", async () => {
     console.log("[PayoutScheduler] Processing pending payouts...")
 
     const oneDayAgo = new Date()
@@ -17,12 +17,16 @@ export function startPayoutScheduler() {
       select: { id: true },
     })
 
-    for (const payout of pendingPayouts) {
-      await getPayoutQueue().add("payout", { payoutId: payout.id })
+    const jobs = pendingPayouts.map((payout) => ({
+      name: "payout",
+      data: { payoutId: payout.id },
+    }))
+    if (jobs.length > 0) {
+      await getPayoutQueue().addBulk(jobs)
     }
 
-    console.log(`[PayoutScheduler] Queued ${pendingPayouts.length} payouts for processing`)
+    console.log(`[PayoutScheduler] Queued ${jobs.length} payouts for processing`)
   })
 
-  console.log("[PayoutScheduler] Scheduled daily at midnight")
+  console.log("[PayoutScheduler] Scheduled at 00:30 daily")
 }

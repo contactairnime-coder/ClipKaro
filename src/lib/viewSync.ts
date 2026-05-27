@@ -2,9 +2,7 @@ import { prisma } from "./prisma"
 import { getYouTubeStats } from "./youtube"
 import { getInstagramStats } from "./instagram"
 import { getTikTokStats } from "./tiktok"
-import { calculateEarnings, checkBountyAvailable } from "./earnings"
-import { runFraudChecks } from "./fraud/detector"
-import { handleFraudResult } from "./fraud/actions"
+import { calculateEarnings } from "./earnings"
 
 export async function syncSubmissionViews(submissionId: string) {
   const submission = await prisma.submission.findUnique({
@@ -63,22 +61,27 @@ export async function syncSubmissionViews(submissionId: string) {
   ])
 
   if (submission.status === "APPROVED" || submission.status === "PAID") {
-    const bountyCheck = await checkBountyAvailable(submission.campaignId, newEarnings - submission.earningsCalculated)
-    if (bountyCheck.available) {
-      await prisma.campaign.update({
-        where: { id: submission.campaignId },
-        data: { remainingBounty: { decrement: newEarnings - submission.earningsCalculated } },
-      })
+    const diff = newEarnings - submission.earningsCalculated
+    if (diff <= 0) {
+      return { viewCount: newViewCount, earningsCalculated: newEarnings, previousViewCount: submission.viewCount, snapshotId: snapshot.id }
+    }
+
+    const updated = await prisma.campaign.updateMany({
+      where: { id: submission.campaignId, remainingBounty: { gte: diff } },
+      data: { remainingBounty: { decrement: diff } },
+    })
+    if (updated.count > 0) {
       await prisma.profile.update({
         where: { id: submission.clipperId },
-        data: { totalEarned: { increment: newEarnings - submission.earningsCalculated } },
+        data: { totalEarned: { increment: diff } },
       })
+    } else {
+      await prisma.campaign.update({
+        where: { id: submission.campaignId, remainingBounty: { lt: diff } },
+        data: { remainingBounty: 0, status: "COMPLETED" },
+      })
+      console.warn(`Bounty exhausted for campaign ${submission.campaignId}, earnings capped`)
     }
-  }
-
-  if (submission.status === "PENDING") {
-    const fraudResult = await runFraudChecks(submissionId)
-    await handleFraudResult(submissionId, fraudResult.score, fraudResult.recommendation)
   }
 
   return {

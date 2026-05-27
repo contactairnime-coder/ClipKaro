@@ -17,10 +17,10 @@ export function getRedisConnection() {
     username: parsed.username ? decodeURIComponent(parsed.username) : undefined,
     tls: parsed.protocol === "rediss:" ? {} : undefined,
     maxRetriesPerRequest: null,
-    enableReadyCheck: false,
+    enableReadyCheck: true,
     retryStrategy(times: number) {
-      if (times > 3) return null
-      return Math.min(times * 200, 2000)
+      const delay = Math.min(times * 200, 10000)
+      return delay
     },
   }
 }

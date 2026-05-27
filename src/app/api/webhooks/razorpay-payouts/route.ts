@@ -39,16 +39,23 @@ export async function POST(request: Request) {
           where: { razorpayPayoutId: payoutId },
         })
         if (existing) {
-          await prisma.payout.update({
-            where: { id: existing.id },
-            data: { status: "FAILED" },
-          })
+          await prisma.$transaction([
+            prisma.payout.update({
+              where: { id: existing.id },
+              data: { status: "FAILED" },
+            }),
+            prisma.profile.update({
+              where: { id: existing.clipperId },
+              data: { totalWithdrawn: { decrement: existing.amount } },
+            }),
+          ])
         }
         break
       }
     }
   } catch (err) {
     console.error("Payout webhook error:", err)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 
   return NextResponse.json({ received: true })

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getEmailQueue } from "../queues"
 
 export function startCampaignStatusScheduler() {
-  cron.schedule("0 * * * *", async () => {
+  cron.schedule("20 * * * *", async () => {
     console.log("[CampaignScheduler] Checking campaign statuses...")
     let completed = 0
     let notified = 0
@@ -28,7 +28,7 @@ export function startCampaignStatusScheduler() {
 
       if (shouldComplete) {
         await prisma.campaign.update({
-          where: { id: campaign.id },
+          where: { id: campaign.id, status: "ACTIVE" },
           data: { status: "COMPLETED" },
         })
         completed++
@@ -49,5 +49,5 @@ export function startCampaignStatusScheduler() {
     console.log(`[CampaignScheduler] Completed ${completed} campaigns, notified ${notified} creators`)
   })
 
-  console.log("[CampaignScheduler] Scheduled every hour")
+  console.log("[CampaignScheduler] Scheduled at :20 past every hour")
 }

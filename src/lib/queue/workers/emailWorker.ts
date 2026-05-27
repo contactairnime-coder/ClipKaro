@@ -2,6 +2,7 @@ import { Worker } from "bullmq"
 import { getRedisConnection } from "../redis"
 import { sendFraudAlert } from "@/lib/emails/fraudAlert"
 import { sendRejectionEmail } from "@/lib/emails/submissionRejected"
+import { sendEmail } from "@/lib/emails/send"
 
 type EmailJobData = {
   type: "FRAUD_ALERT" | "SUBMISSION_REJECTED" | "CAMPAIGN_ACTIVATED" | "PAYOUT_PROCESSED" | "WELCOME"
@@ -38,15 +39,40 @@ export function createEmailWorker() {
           break
 
         case "CAMPAIGN_ACTIVATED":
-          console.log(`[EmailWorker] Campaign activated email to ${to}`)
+          await sendEmail({
+            to,
+            subject: `[ClipKaro] Campaign Activated — ${String(data.campaignTitle || "")}`,
+            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
+              <h2 style="color:#059669;">Campaign Live!</h2>
+              <p>Your campaign <strong>${String(data.campaignTitle)}</strong> is now active.</p>
+              <p>Clippers can now submit their clips. Track progress in your dashboard.</p>
+              <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://clipkaro.in"}/dashboard/creator/campaigns/${String(data.campaignId || "")}" style="display:inline-block;background:#059669;color:white;padding:10px 20px;text-decoration:none;border-radius:6px;">View Campaign</a></p>
+            </div>`,
+          })
           break
 
         case "PAYOUT_PROCESSED":
-          console.log(`[EmailWorker] Payout processed email to ${to}`)
+          await sendEmail({
+            to,
+            subject: `[ClipKaro] Payout Processed — ₹${Number(data.amount || 0).toLocaleString()}`,
+            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
+              <h2 style="color:#059669;">Payout Processed!</h2>
+              <p>Your payout of <strong>₹${Number(data.amount || 0).toLocaleString()}</strong> has been processed.</p>
+              <p>It should arrive in your UPI account (<strong>${String(data.upiId || "")}</strong>) shortly.</p>
+            </div>`,
+          })
           break
 
         case "WELCOME":
-          console.log(`[EmailWorker] Welcome email to ${to}`)
+          await sendEmail({
+            to,
+            subject: `Welcome to ClipKaro! Start Earning Today`,
+            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
+              <h2 style="color:#059669;">Welcome to ClipKaro!</h2>
+              <p>You've joined India's first clipping platform.</p>
+              <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://clipkaro.in"}/dashboard" style="display:inline-block;background:#059669;color:white;padding:10px 20px;text-decoration:none;border-radius:6px;">Go to Dashboard</a></p>
+            </div>`,
+          })
           break
       }
 

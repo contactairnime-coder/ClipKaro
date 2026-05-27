@@ -18,6 +18,14 @@ export function createPayoutWorker() {
       if (!payout) throw new Error("Payout not found")
       if (payout.status !== "PENDING") return { skipped: true, reason: "Already processed" }
 
+      const updated = await prisma.payout.updateMany({
+        where: { id: payoutId, status: "PENDING" },
+        data: { status: "PROCESSING" },
+      })
+      if (updated.count === 0) {
+        return { skipped: true, reason: "Already processed by another worker" }
+      }
+
       const razorpay = getRazorpayInstance()
       const clipperName = payout.clipper.name || payout.clipper.email || "ClipKaro User"
 
@@ -42,7 +50,6 @@ export function createPayoutWorker() {
       await prisma.payout.update({
         where: { id: payoutId },
         data: {
-          status: "PROCESSING",
           razorpayPayoutId: razorpayPayout.id,
         },
       })
@@ -58,7 +65,7 @@ export function createPayoutWorker() {
     },
     {
       connection: getRedisConnection(),
-      concurrency: 2,
+      concurrency: 5,
       removeOnComplete: { count: 100 },
       removeOnFail: { count: 50 },
     }

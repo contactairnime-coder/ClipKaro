@@ -15,6 +15,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Payment verification failed" }, { status: 400 })
   }
 
+  if (campaignId) {
+    const campaign = await prisma.campaign.findUnique({ where: { id: campaignId } })
+    if (!campaign) return NextResponse.json({ error: "Campaign not found" }, { status: 404 })
+    if (campaign.creatorId !== user.id) {
+      return NextResponse.json({ error: "You can only add funds to your own campaigns" }, { status: 403 })
+    }
+  }
+
   const [transaction] = await prisma.$transaction([
     prisma.transaction.create({
       data: {

@@ -27,8 +27,14 @@ export async function GET(request: Request) {
       ? { bountyPerLakhViews: "desc" }
       : { createdAt: "desc" }
 
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"))
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20")))
+    const skip = (page - 1) * limit
+
     const campaigns = await prisma.campaign.findMany({
       where,
+      skip,
+      take: limit,
       include: {
         creator: {
           select: {
@@ -41,7 +47,9 @@ export async function GET(request: Request) {
       orderBy,
     })
 
-    return NextResponse.json(campaigns)
+    const total = await prisma.campaign.count({ where })
+
+    return NextResponse.json({ campaigns, pagination: { page, limit, total } })
   } catch (error) {
     console.error("Get campaigns error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

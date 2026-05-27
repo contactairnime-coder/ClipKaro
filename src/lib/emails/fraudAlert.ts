@@ -1,3 +1,5 @@
+import { sendEmail } from "./send"
+
 export type FraudAlertData = {
   clipperName: string
   submissionUrl: string
@@ -11,7 +13,7 @@ export function buildFraudAlertEmail(data: FraudAlertData) {
     subject: `[ClipKaro Fraud Alert] High Risk Submission — Score: ${data.fraudScore}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #dc2626;">🚨 Fraud Alert</h2>
+        <h2 style="color: #dc2626;">Fraud Alert</h2>
         <p>A submission has been flagged with a high fraud score.</p>
         <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
           <tr><td style="padding: 8px; border: 1px solid #e5e7eb; font-weight: bold;">Clipper</td><td style="padding: 8px; border: 1px solid #e5e7eb;">${data.clipperName}</td></tr>
@@ -28,6 +30,9 @@ export function buildFraudAlertEmail(data: FraudAlertData) {
 
 export async function sendFraudAlert(data: FraudAlertData) {
   const email = buildFraudAlertEmail(data)
-  console.log("[FraudAlert] Would send email:", email.subject)
-  return email
+  return sendEmail({
+    to: "soni.110051@gmail.com",
+    subject: email.subject,
+    html: email.html,
+  })
 }
