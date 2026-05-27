@@ -134,10 +134,10 @@ export default async function CampaignDetail({ params }: { params: { id: string 
                         {sub.status === "PENDING" ? (
                           <div className="flex gap-1">
                             <form action={`/api/submissions/${sub.id}/approve`} method="POST">
-                              <Button size="sm" variant="default">Approve</Button>
+                              <Button size="sm" variant="default" type="submit">Approve</Button>
                             </form>
                             <form action={`/api/submissions/${sub.id}/reject`} method="POST">
-                              <Button size="sm" variant="destructive">Reject</Button>
+                              <Button size="sm" variant="destructive" type="submit">Reject</Button>
                             </form>
                           </div>
                         ) : sub.status === "REJECTED" && sub.rejectionReason ? (
