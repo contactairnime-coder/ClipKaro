@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -13,9 +13,20 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const supabase = createClient()
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.push("/dashboard")
+        router.refresh()
+      } else {
+        setLoading(false)
+      }
+    })
+  }, [])
 
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault()

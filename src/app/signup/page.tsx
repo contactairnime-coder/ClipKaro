@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -19,10 +19,21 @@ function SignupForm() {
   const [name, setName] = useState("")
   const [role, setRole] = useState<"CREATOR" | "CLIPPER">(defaultRole)
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [success, setSuccess] = useState(false)
 
   const supabase = createClient()
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.push("/dashboard")
+        router.refresh()
+      } else {
+        setLoading(false)
+      }
+    })
+  }, [])
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault()
