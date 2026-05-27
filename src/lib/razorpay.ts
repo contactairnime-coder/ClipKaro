@@ -5,10 +5,12 @@ let instance: Razorpay | null = null
 
 function getInstance() {
   if (!instance) {
-    instance = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_KEY_SECRET!,
-    })
+    const key_id = process.env.RAZORPAY_KEY_ID
+    const key_secret = process.env.RAZORPAY_KEY_SECRET
+    if (!key_id || !key_secret) {
+      throw new Error("RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET must be set in environment variables")
+    }
+    instance = new Razorpay({ key_id, key_secret })
   }
   return instance
 }
