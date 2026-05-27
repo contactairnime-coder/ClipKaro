@@ -10,33 +10,35 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const existing = await prisma.profile.findUnique({ where: { id: user.id } })
-        if (!existing) {
-          const meta = user.user_metadata || {}
-          const role = (meta.role as string) || "CLIPPER"
-          const email = user.email || ""
-          await prisma.profile.create({
-            data: {
-              id: user.id,
-              email,
-              name: (meta.name as string) || email.split("@")[0] || null,
-              avatar: (meta.avatar_url as string) || null,
-              role: ["CREATOR", "CLIPPER", "ADMIN"].includes(role) ? role : "CLIPPER",
-            },
-          })
-          if (role === "CREATOR") {
-            await prisma.creatorProfile.create({
-              data: { userId: user.id },
-            }).catch(() => {})
-          }
-        }
-      }
-      return NextResponse.redirect(`${origin}${next}`)
+    if (error) {
+      return NextResponse.redirect(`${origin}/login?error=auth_callback_error`)
     }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=auth_callback_error`)
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return NextResponse.redirect(`${origin}/login?error=no_session`)
+  }
+
+  const existing = await prisma.profile.findUnique({ where: { id: user.id } })
+  if (!existing) {
+    const meta = user.user_metadata || {}
+    const role = (meta.role as string) || "CLIPPER"
+    const email = user.email || ""
+    await prisma.profile.create({
+      data: {
+        id: user.id,
+        email,
+        name: (meta.name as string) || (meta.full_name as string) || email.split("@")[0] || null,
+        avatar: (meta.avatar_url as string) || null,
+        role: ["CREATOR", "CLIPPER", "ADMIN"].includes(role) ? role : "CLIPPER",
+      },
+    })
+    if (role === "CREATOR") {
+      await prisma.creatorProfile.create({ data: { userId: user.id } }).catch(() => {})
+    }
+  }
+
+  return NextResponse.redirect(`${origin}${next}`)
 }
