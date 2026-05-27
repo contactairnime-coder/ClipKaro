@@ -8,8 +8,8 @@
 
 | # | Issue | Status |
 |---|-------|--------|
-| 3 | Verification email link opens localhost:3000 instead of Vercel URL | ⏳ Fix: change Site URL in Supabase Dashboard → Authentication → Settings |
-| 4 | Sign in / Sign up with Google — "Unsupported provider: provider is not enabled" on both pages | ⏳ Fix: enable Google provider in Supabase Dashboard → Authentication → Providers + configure Google Cloud Console OAuth |
+| 3 | Verification email link opens localhost:3000 instead of Vercel URL | ✅ Fixed — Site URL change kar diya |
+| 4 | Sign in / Sign up with Google — "Unsupported provider: provider is not enabled" on both pages | ✅ Fixed — Google OAuth enabled in Supabase Dashboard + Google Cloud Console config done |
 
 ---
 
@@ -25,6 +25,8 @@
 | 8 | Earnings UPI ID not pre-filled | Added profile fetch to auto-fill UPI input |
 | 9 | `/auth/complete-profile` only POST (405 on GET) | Replaced with proper page + new `/api/complete-profile` endpoint |
 | 10 | Ban API didn't update profile isVerified | Added `prisma.profile.update` for isVerified on ban/unban |
+| 11 | Build lint errors (unused vars) | Removed unused `data`, `updated` variables |
+| 12 | Login/Signup page shows when already logged in | Added session check → redirect to dashboard |
 
 ---
 

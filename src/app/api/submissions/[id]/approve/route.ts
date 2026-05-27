@@ -1,20 +1,20 @@
-import { NextResponse } from "next/server"
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { prisma } from "@/lib/prisma"
 
 async function handleApprove(request: Request, params: { id: string }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 })
 
   const submission = await prisma.submission.findUnique({
     where: { id: params.id },
     include: { campaign: true },
   })
 
-  if (!submission) return NextResponse.json({ error: "Submission not found" }, { status: 404 })
+  if (!submission) return Response.json({ error: "Submission not found" }, { status: 404 })
   if (submission.campaign.creatorId !== user.id) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+    return Response.json({ error: "Forbidden" }, { status: 403 })
   }
 
   const earnings = Math.round(submission.viewCount * submission.campaign.bountyPerLakhViews / 100000)
@@ -42,8 +42,7 @@ async function handleApprove(request: Request, params: { id: string }) {
     }),
   ])
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || request.headers.get("origin") || "https://clip-karo-4wbs-qsw5cb71c-airnime.vercel.app"
-  return NextResponse.redirect(new URL(`/dashboard/creator/campaigns/${submission.campaignId}`, baseUrl))
+  redirect(`/dashboard/creator/campaigns/${submission.campaignId}`)
 }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
