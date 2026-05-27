@@ -30,6 +30,7 @@
 | 13 | Admin campaigns: Reject button dead, All Campaigns tab always empty | Wired reject handler + created `/api/admin/campaigns/all` endpoint |
 | 14 | Clipper Refresh Views always 403 | Changed to allow clippers to sync their own submissions |
 | 15 | Clipper settings: social inputs not wired | Removed unused social section (no DB fields for clipper) |
+| 16 | Signout redirect → 405 error (NextResponse.redirect uses 307, preserves POST method) | Changed to `{ status: 303 }` so browser uses GET for /login |
 
 ---
 
