@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
-import { Scissors, Search, IndianRupee, Megaphone, Users, TrendingUp, Target, BarChart3, Star, Camera, Music, Play, ChevronDown, ArrowRight, Wallet, Zap, Globe, Share2, Monitor } from "lucide-react"
+import { Scissors, Search, Megaphone, Users, TrendingUp, Target, BarChart3, Star, Camera, Music, Play, ChevronDown, ArrowRight, Wallet, Zap, Globe, Share2, Monitor } from "lucide-react"
 
 const sections = [
   { id: "how-it-works", label: "How it Works" },
@@ -463,7 +464,7 @@ function TestimonialsSection() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-300">
-                  <img className="w-full h-full object-cover" src={t.img} alt={t.name} />
+                  <Image className="w-full h-full object-cover" src={t.img} alt={t.name} width={48} height={48} />
                 </div>
                 <div>
                   <div className="font-bold text-gray-900">{t.name}</div>
