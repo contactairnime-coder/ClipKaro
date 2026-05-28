@@ -187,16 +187,21 @@ function Navbar() {
       </div>
 
       {menuOpen && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="border-t border-[#1f1f1f] bg-[#0a0a0a] px-4 py-4 md:hidden">
-          <div className="flex flex-col gap-3">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 top-16 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl md:hidden flex flex-col"
+        >
+          <div className="flex flex-col gap-2 p-8">
             {sections.map((s) => (
-              <Link key={s.id} href={`#${s.id}`} className="text-sm font-medium text-gray-400" onClick={() => setMenuOpen(false)}>
+              <Link key={s.id} href={`#${s.id}`} className="text-xl font-medium text-gray-300 py-4 border-b border-[#1f1f1f]" onClick={() => setMenuOpen(false)}>
                 {s.label}
               </Link>
             ))}
-            <hr className="border-[#1f1f1f]" />
-            <Link href="/login" className="text-sm font-medium text-gray-400" onClick={() => setMenuOpen(false)}>Login</Link>
-            <Link href="/signup" className="rounded-lg bg-green-600 px-4 py-2 text-center text-sm font-medium text-white" onClick={() => setMenuOpen(false)}>Start Earning</Link>
+            <div className="mt-8 space-y-4">
+              <Link href="/login" className="block text-xl font-medium text-gray-300 py-3" onClick={() => setMenuOpen(false)}>Login</Link>
+              <Link href="/signup" className="block w-full bg-green-600 px-6 py-4 text-center text-lg font-bold text-white rounded-xl" onClick={() => setMenuOpen(false)}>Start Earning</Link>
+            </div>
           </div>
         </motion.div>
       )}
@@ -228,7 +233,7 @@ function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-4 leading-tight"
+          className="text-[clamp(32px,8vw,72px)] font-extrabold tracking-tight text-white mb-4 leading-tight"
         >
           Viral Karo. <span className="text-green-400">Paisa Kamao.</span>
         </motion.h1>
@@ -258,13 +263,13 @@ function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3"
         >
-          <Link href="/signup?role=clipper" className="w-full sm:w-auto bg-green-600 text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg shadow-green-600/20 hover:shadow-green-500/30 hover:bg-green-500 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+          <Link href="/signup?role=clipper" className="w-full sm:w-auto bg-green-600 text-white font-bold text-base sm:text-lg px-8 sm:px-10 py-4 min-h-[44px] rounded-xl shadow-lg shadow-green-600/20 hover:shadow-green-500/30 hover:bg-green-500 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
             Join as Clipper — Free
             <Sparkles className="w-5 h-5" />
           </Link>
-          <Link href="/signup?role=creator" className="w-full sm:w-auto bg-white/5 text-white border border-[#1f1f1f] font-bold text-lg px-10 py-4 rounded-xl hover:bg-white/10 transition-all backdrop-blur-sm">
+          <Link href="/signup?role=creator" className="w-full sm:w-auto bg-white/5 text-white border border-[#1f1f1f] font-bold text-base sm:text-lg px-8 sm:px-10 py-4 min-h-[44px] rounded-xl hover:bg-white/10 transition-all backdrop-blur-sm">
             Launch Campaign
           </Link>
         </motion.div>
@@ -379,7 +384,7 @@ function HowItWorksSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold text-white mb-4"
+          className="text-[clamp(24px,6vw,48px)] font-bold text-white mb-4"
         >
           Kaise Kaam Karta Hai?
         </motion.h2>
@@ -422,15 +427,26 @@ function HowItWorksSection() {
                   <div className="text-green-400">{s.icon}</div>
                 </div>
                 {i < steps.length - 1 && (
-                  <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.2 + 0.3 }}
-                    className="hidden md:block absolute top-8 -right-6 z-20"
-                  >
-                    <ArrowRight className="w-5 h-5 text-green-500" />
-                  </motion.div>
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.2 + 0.3 }}
+                      className="hidden md:block absolute top-8 -right-6 z-20"
+                    >
+                      <ArrowRight className="w-5 h-5 text-green-500" />
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.2 + 0.3 }}
+                      className="md:hidden my-4"
+                    >
+                      <ChevronDown className="w-6 h-6 text-green-500 mx-auto" />
+                    </motion.div>
+                  </>
                 )}
                 <div className="w-8 h-8 rounded-full bg-green-600 text-white font-bold flex items-center justify-center mb-3 text-sm">
                   {s.step}
@@ -467,7 +483,7 @@ function EarningsCalculatorSection() {
           viewport={{ once: true }}
           className="mb-12"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-white">Kitna Kama Sakte Ho?</h2>
+          <h2 className="text-[clamp(24px,6vw,48px)] font-bold text-white">Kitna Kama Sakte Ho?</h2>
           <p className="text-gray-400 text-lg mt-2">Estimate your potential earnings based on your reach.</p>
         </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -617,7 +633,7 @@ function CampaignsSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Abhi Available Campaigns</h2>
+          <h2 className="text-[clamp(24px,6vw,48px)] font-bold text-white mb-4">Abhi Available Campaigns</h2>
           <p className="text-gray-400">In campaigns ke clips banao aur views ke hisaab se paisa kamao.</p>
         </motion.div>
 
@@ -749,7 +765,7 @@ function SocialProofSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold text-white text-center mb-16"
+          className="text-[clamp(24px,6vw,48px)] font-bold text-white text-center mb-16"
         >
           Clippers Ki Real Earnings
         </motion.h2>
@@ -804,7 +820,7 @@ function ForCreatorsSection() {
           viewport={{ once: true }}
           className="text-center mb-16 max-w-2xl mx-auto"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Creator Ho? Free Marketing Milegi</h2>
+          <h2 className="text-[clamp(24px,6vw,48px)] font-bold text-white mb-4">Creator Ho? Free Marketing Milegi</h2>
           <p className="text-lg text-gray-400">Hazaron clippers aapka content viral karenge, aur aap sirf results ke liye pay karenge.</p>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -846,7 +862,7 @@ function TestimonialsSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold text-white text-center mb-16"
+          className="text-[clamp(24px,6vw,48px)] font-bold text-white text-center mb-16"
         >
           Logon Ne Kya Kaha
         </motion.h2>
@@ -895,7 +911,7 @@ function FAQSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold text-white text-center mb-16"
+          className="text-[clamp(24px,6vw,48px)] font-bold text-white text-center mb-16"
         >
           Sawaal Jawab
         </motion.h2>
@@ -910,7 +926,7 @@ function FAQSection() {
               className="bg-[#111111] border border-[#1f1f1f] rounded-2xl overflow-hidden"
             >
               <button
-                className="w-full p-6 font-bold text-left text-gray-200 cursor-pointer flex justify-between items-center hover:bg-white/5 transition-colors"
+                className="w-full p-6 min-h-[48px] font-bold text-left text-gray-200 cursor-pointer flex justify-between items-center hover:bg-white/5 transition-colors"
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
               >
                 <span>{faq.q}</span>
@@ -950,7 +966,7 @@ function FinalCTASection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-6xl font-extrabold text-white mb-6"
+          className="text-[clamp(32px,8vw,64px)] font-extrabold text-white mb-6"
         >
           Aaj Hi Shuru Karo
         </motion.h2>
@@ -996,20 +1012,20 @@ function Footer() {
     <footer className="py-16 md:py-24 px-4 md:px-8 border-t border-[#1f1f1f]" style={{ background: "#0a0a0a" }}>
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between mb-16 gap-12">
-          <div className="max-w-sm">
-            <div className="flex items-center gap-2 mb-6">
+          <div className="max-w-sm text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-6">
               <Scissors className="w-6 h-6 text-green-400" />
               <span className="text-2xl font-bold text-white">ClipKaro</span>
             </div>
             <p className="text-gray-500 text-sm mb-8">India ka pehla clipping platform. Indian creators ke clips banao, views kamao, ₹ kamao.</p>
-            <div className="flex gap-4">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center hover:bg-green-600 transition-colors border border-[#1f1f1f]">
+            <div className="flex justify-center md:justify-start gap-4">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-[#111111] flex items-center justify-center hover:bg-green-600 transition-colors border border-[#1f1f1f]">
                 <Globe className="w-5 h-5 text-gray-400" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center hover:bg-green-600 transition-colors border border-[#1f1f1f]">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-[#111111] flex items-center justify-center hover:bg-green-600 transition-colors border border-[#1f1f1f]">
                 <Share2 className="w-5 h-5 text-gray-400" />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center hover:bg-green-600 transition-colors border border-[#1f1f1f]">
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-[#111111] flex items-center justify-center hover:bg-green-600 transition-colors border border-[#1f1f1f]">
                 <Monitor className="w-5 h-5 text-gray-400" />
               </a>
             </div>
