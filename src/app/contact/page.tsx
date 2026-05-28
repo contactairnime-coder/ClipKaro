@@ -59,7 +59,7 @@ export default function ContactPage() {
               <div className="mt-4 space-y-4 text-sm text-gray-600">
                 <div>
                   <p className="font-medium text-gray-900">Email</p>
-                  <p>contact@clipkaro.in</p>
+                  <p>contact.airnime@gmail.com</p>
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Social</p>
@@ -94,7 +94,7 @@ export default function ContactPage() {
       </motion.div>
 
       <footer className="border-t py-8 text-center text-sm text-gray-500">
-        <p>Made in India — © 2024 ClipKaro</p>
+        <p>Made in India — © 2026 ClipKaro</p>
       </footer>
     </div>
   )

@@ -45,19 +45,19 @@ export default function PrivacyPage() {
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900">5. Your Rights</h2>
-              <p className="mt-2">You can access, update, or delete your account data at any time. Contact us at contact@clipkaro.in for data deletion requests.</p>
+              <p className="mt-2">You can access, update, or delete your account data at any time. Contact us at contact.airnime@gmail.com for data deletion requests.</p>
             </section>
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900">6. Contact</h2>
-              <p className="mt-2">For privacy-related inquiries, email us at contact@clipkaro.in.</p>
+              <p className="mt-2">For privacy-related inquiries, email us at contact.airnime@gmail.com.</p>
             </section>
           </div>
         </main>
       </motion.div>
 
       <footer className="border-t py-8 text-center text-sm text-gray-500">
-        <p>Made in India — © 2024 ClipKaro</p>
+        <p>Made in India — © 2026 ClipKaro</p>
       </footer>
     </div>
   )

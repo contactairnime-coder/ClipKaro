@@ -61,14 +61,14 @@ export default function TermsPage() {
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900">7. Contact</h2>
-              <p className="mt-2">For any questions, contact us at contact@clipkaro.in.</p>
+              <p className="mt-2">For any questions, contact us at contact.airnime@gmail.com.</p>
             </section>
           </div>
         </main>
       </motion.div>
 
       <footer className="border-t py-8 text-center text-sm text-gray-500">
-        <p>Made in India — © 2024 ClipKaro</p>
+        <p>Made in India — © 2026 ClipKaro</p>
       </footer>
     </div>
   )

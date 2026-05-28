@@ -56,7 +56,7 @@ export default function AboutPage() {
       </motion.div>
 
       <footer className="border-t py-8 text-center text-sm text-gray-500">
-        <p>Made in India — © 2024 ClipKaro</p>
+        <p>Made in India — © 2026 ClipKaro</p>
       </footer>
     </div>
   )
