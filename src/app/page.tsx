@@ -212,14 +212,35 @@ function Navbar() {
 function HeroSection() {
   const typedText = useTypingAnimation(words)
 
+  const notificationCards = [
+    {
+      bg: "bg-green-600/90 border-green-400/20",
+      label: "LIVE EARNING",
+      labelClass: "text-green-200",
+      text: <>Rahul ne <span className="text-green-200">₹2,400</span> kamaye aaj</>,
+    },
+    {
+      bg: "bg-white/10 border-white/10",
+      label: "NEW CAMPAIGN",
+      labelClass: "text-gray-400",
+      text: <>₹<span className="text-green-400">50</span>/lakh views</>,
+    },
+    {
+      bg: "bg-blue-600/50 border-blue-400/20",
+      label: "VIEWS SYNCED",
+      labelClass: "text-blue-200",
+      text: <><span className="text-blue-200">1,204</span> views synced</>,
+    },
+  ]
+
   return (
-    <section className="relative min-h-screen flex items-center pt-20 pb-32 px-4 md:px-8 text-center overflow-hidden" style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #052e16 50%, #0a0a0a 100%)" }}>
+    <section className="relative flex flex-col items-center min-h-screen pt-20 pb-32 px-4 md:px-8 text-center overflow-hidden" style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #052e16 50%, #0a0a0a 100%)" }}>
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a0a]/80 pointer-events-none" />
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-green-500/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-green-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-5xl mx-auto relative z-10 w-full">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -273,27 +294,42 @@ function HeroSection() {
             Launch Campaign
           </Link>
         </motion.div>
+
+        <div className="flex flex-col gap-3 w-full mt-6 md:hidden">
+          {notificationCards.map((card, i) => (
+            <motion.div
+              key={card.label}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 + i * 0.1 }}
+              className={`w-full flex items-center gap-3 rounded-xl p-3 text-sm backdrop-blur-sm ${card.bg}`}
+            >
+              <div>
+                <p className={`text-[10px] ${card.labelClass}`}>{card.label}</p>
+                <p className="text-white font-bold text-sm">{card.text}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <FloatingCard x={-35} y={-15} delay={0.5}>
-          <div className="bg-green-600/90 backdrop-blur-sm text-white px-4 py-3 rounded-xl shadow-xl border border-green-400/20 w-52">
-            <p className="text-xs text-green-200">LIVE EARNING</p>
-            <p className="text-lg font-bold">Rahul ne <span className="text-green-200">₹2,400</span> kamaye aaj</p>
-          </div>
-        </FloatingCard>
-        <FloatingCard x={35} y={-10} delay={1}>
-          <div className="bg-white/10 backdrop-blur-sm text-white px-4 py-3 rounded-xl shadow-xl border border-white/10 w-52">
-            <p className="text-xs text-gray-400">NEW CAMPAIGN</p>
-            <p className="text-lg font-bold">₹<span className="text-green-400">50</span>/lakh views</p>
-          </div>
-        </FloatingCard>
-        <FloatingCard x={0} y={20} delay={1.5}>
-          <div className="bg-blue-600/50 backdrop-blur-sm text-white px-4 py-3 rounded-xl shadow-xl border border-blue-400/20 w-52">
-            <p className="text-xs text-blue-200">VIEWS SYNCED</p>
-            <p className="text-lg font-bold"><span className="text-blue-200">1,204</span> views synced</p>
-          </div>
-        </FloatingCard>
+      <div className="hidden md:block absolute inset-0 pointer-events-none overflow-hidden">
+        {notificationCards.map((card, i) => {
+          const positions = [
+            { x: -35, y: -15, delay: 0.5 },
+            { x: 35, y: -10, delay: 1 },
+            { x: 0, y: 20, delay: 1.5 },
+          ]
+          const pos = positions[i]
+          return (
+            <FloatingCard key={card.label} x={pos.x} y={pos.y} delay={pos.delay}>
+              <div className={`backdrop-blur-sm text-white px-4 py-3 rounded-xl shadow-xl border w-52 ${card.bg}`}>
+                <p className={`text-xs ${card.labelClass}`}>{card.label}</p>
+                <p className="text-lg font-bold">{card.text}</p>
+              </div>
+            </FloatingCard>
+          )
+        })}
       </div>
     </section>
   )
