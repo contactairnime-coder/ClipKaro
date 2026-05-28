@@ -681,32 +681,44 @@ function CampaignsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
-              className="bg-[#111111] rounded-2xl border border-[#1f1f1f] p-6 hover:border-green-500/30 transition-all hover:-translate-y-1 relative"
+              className="relative"
             >
-              {i === 0 && (
-                <span className="absolute -top-2.5 -right-2.5 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  Featured
-                </span>
+              <div className={`bg-[#111111] rounded-2xl border border-[#1f1f1f] p-6 relative ${i >= 1 ? "blur-sm pointer-events-none select-none" : "hover:border-green-500/30 hover:-translate-y-1"}`}>
+                {i === 0 && (
+                  <span className="absolute -top-2.5 -right-2.5 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    Featured
+                  </span>
+                )}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10 text-sm font-bold text-green-400 border border-green-500/20">
+                    {(c.creatorName || "C").charAt(0)}
+                  </div>
+                  <p className="text-sm font-medium text-gray-300">{c.creatorName || "Creator"}</p>
+                </div>
+                <h3 className="font-bold text-white line-clamp-2 mb-3">{c.title}</h3>
+                <p className="text-2xl font-bold text-green-400 mb-3">₹{c.bountyPerLakhViews}/lakh views</p>
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <span>Remaining: ₹{c.remainingBounty.toLocaleString()}</span>
+                  <div className="flex gap-1">
+                    {c.platforms.map((p) => (
+                      <span key={p} className="text-gray-500">{platformIcons[p] || p}</span>
+                    ))}
+                  </div>
+                </div>
+                <Link href={i === 0 ? "/signup?role=clipper" : "#"} className={`block w-full text-center py-2.5 rounded-xl font-bold text-sm transition-colors ${i === 0 ? "bg-green-600 text-white hover:bg-green-500" : "bg-[#1f1f1f] text-gray-500"}`}>
+                  {i === 0 ? "Join Campaign" : "Unlock Campaign"}
+                </Link>
+              </div>
+              {i >= 1 && (
+                <div className="absolute inset-0 flex items-center justify-center z-10">
+                  <Link
+                    href="/login"
+                    className="bg-green-600 text-white font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-green-500 transition-all text-base"
+                  >
+                    Login to get started
+                  </Link>
+                </div>
               )}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10 text-sm font-bold text-green-400 border border-green-500/20">
-                  {(c.creatorName || "C").charAt(0)}
-                </div>
-                <p className="text-sm font-medium text-gray-300">{c.creatorName || "Creator"}</p>
-              </div>
-              <h3 className="font-bold text-white line-clamp-2 mb-3">{c.title}</h3>
-              <p className="text-2xl font-bold text-green-400 mb-3">₹{c.bountyPerLakhViews}/lakh views</p>
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                <span>Remaining: ₹{c.remainingBounty.toLocaleString()}</span>
-                <div className="flex gap-1">
-                  {c.platforms.map((p) => (
-                    <span key={p} className="text-gray-500">{platformIcons[p] || p}</span>
-                  ))}
-                </div>
-              </div>
-              <Link href="/signup?role=clipper" className="block w-full text-center bg-green-600 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-green-500 transition-colors">
-                Join Campaign
-              </Link>
             </motion.div>
           ))}
         </div>
