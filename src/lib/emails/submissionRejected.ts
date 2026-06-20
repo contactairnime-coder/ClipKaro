@@ -10,7 +10,7 @@ export type RejectionData = {
 
 export function buildRejectionEmail(data: RejectionData) {
   return {
-    subject: `[ClipKaro] Submission Rejected — ${data.campaignTitle}`,
+    subject: `[Clipr] Submission Rejected — ${data.campaignTitle}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #6b7280;">Submission Update</h2>

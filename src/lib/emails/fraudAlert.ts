@@ -10,7 +10,7 @@ export type FraudAlertData = {
 
 export function buildFraudAlertEmail(data: FraudAlertData) {
   return {
-    subject: `[ClipKaro Fraud Alert] High Risk Submission — Score: ${data.fraudScore}`,
+    subject: `[Clipr Fraud Alert] High Risk Submission — Score: ${data.fraudScore}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #dc2626;">Fraud Alert</h2>

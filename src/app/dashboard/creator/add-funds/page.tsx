@@ -102,7 +102,7 @@ export default function AddFundsPage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
-        name: "ClipKaro",
+        name: "Clipr",
         description: `Add ₹${numAmount.toLocaleString()} wallet balance`,
         order_id: order.orderId,
         prefill: { contact: "", email: "" },
@@ -157,7 +157,7 @@ export default function AddFundsPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Add Funds</h1>
-        <p className="text-muted-foreground">Add money to your ClipKaro wallet for campaign bounties</p>
+        <p className="text-muted-foreground">Add money to your Clipr wallet for campaign bounties</p>
       </div>
 
       <motion.div

@@ -27,7 +27,7 @@ export function createPayoutWorker() {
       }
 
       const razorpay = getRazorpayInstance()
-      const clipperName = payout.clipper.name || payout.clipper.email || "ClipKaro User"
+      const clipperName = payout.clipper.name || payout.clipper.email || "Clipr User"
 
       const razorpayPayout = await razorpay.api.post<Record<string, unknown>, { id: string }>({
         url: "/v1/payouts",

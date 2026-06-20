@@ -1,8 +1,8 @@
-# ClipKaro — Complete Testing Plan
+# Clipr — Complete Testing Plan
 
 ## Flow 1: Signup + Auth
 ```
-1. Open https://clipkaro.vercel.app
+1. Open https://clipr.vercel.app
 2. Click "Get Started" → /signup
 3. Select role: CLIPPER / CREATOR
 4. Fill: Name, Email, Password → Submit
@@ -23,7 +23,7 @@
 
 ## Flow 3: Creator — Create Campaign
 ```
-1. Login as CREATOR (creator@clipkaro.in / Creator@123)
+1. Login as CREATOR (creator@clipr.in / Creator@123)
 2. /dashboard/creator/campaigns/create
 3. Fill:
    - Title: "Test Campaign"
@@ -53,7 +53,7 @@
 
 ## Flow 5: Admin — Approve Campaign
 ```
-1. Login as ADMIN (admin@clipkaro.in / Admin@123)
+1. Login as ADMIN (admin@clipr.in / Admin@123)
 2. /dashboard/admin/campaigns
 3. ✅ Pending campaigns dikhte hain
 4. Approve click karo
@@ -62,7 +62,7 @@
 
 ## Flow 6: Clipper — Browse & Submit
 ```
-1. Login as CLIPPER (clipper@clipkaro.in / Clipper@123)
+1. Login as CLIPPER (clipper@clipr.in / Clipper@123)
 2. /dashboard/clipper
 3. ✅ Active campaigns dikhte hain
 4. Search / filter by platform use karo
@@ -131,7 +131,7 @@
 
 ## Flow 14: API Health Check
 ```
-1. Browser mein kholo: https://clipkaro.vercel.app/api/health
+1. Browser mein kholo: https://clipr.vercel.app/api/health
 2. ✅ Response:
    {
      "status": "healthy",
@@ -144,8 +144,8 @@
 
 ## Flow 15: Sitemap & Robots
 ```
-1. https://clipkaro.vercel.app/sitemap.xml → ✅ XML dikhe
-2. https://clipkaro.vercel.app/robots.txt → ✅ Text dikhe
+1. https://clipr.vercel.app/sitemap.xml → ✅ XML dikhe
+2. https://clipr.vercel.app/robots.txt → ✅ Text dikhe
 ```
 
 ## Flow 16: Static Pages
@@ -165,7 +165,7 @@
 
 ## Flow 18: 404 Page
 ```
-1. Browser mein kholo: https://clipkaro.vercel.app/random-page
+1. Browser mein kholo: https://clipr.vercel.app/random-page
 2. ✅ 404 page dikhta hai
 ```
 

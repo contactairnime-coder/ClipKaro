@@ -18,7 +18,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     return NextResponse.json({ error: "Payout already processed" }, { status: 400 })
   }
 
-  const clipperName = payout.clipper.name || payout.clipper.email || "ClipKaro User"
+  const clipperName = payout.clipper.name || payout.clipper.email || "Clipr User"
   const referenceId = `payout_${payout.id.slice(0, 12)}`
 
   try {

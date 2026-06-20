@@ -11,7 +11,7 @@ export default function PrivacyPage() {
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
             <Scissors className="w-5 h-5" />
-            <span className="text-xl font-bold">ClipKaro</span>
+            <span className="text-xl font-bold">Clipr</span>
           </Link>
           <Link href="/" className="text-sm text-gray-600 hover:underline">← Back to Home</Link>
         </div>
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900">2. How We Use Your Information</h2>
-              <p className="mt-2">We use your information to operate the ClipKaro platform, process payments, prevent fraud, improve our services, and communicate with you about your account and campaigns.</p>
+              <p className="mt-2">We use your information to operate the Clipr platform, process payments, prevent fraud, improve our services, and communicate with you about your account and campaigns.</p>
             </section>
 
             <section>
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
       </motion.div>
 
       <footer className="border-t py-8 text-center text-sm text-gray-500">
-        <p>Made in India — © 2026 ClipKaro</p>
+        <p>Made in India — © 2026 Clipr</p>
       </footer>
     </div>
   )

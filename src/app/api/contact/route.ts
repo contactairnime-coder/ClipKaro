@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "ClipKaro <noreply@clipkaro.in>",
+        from: "Clipr <noreply@clipr.in>",
         to: "soni.110051@gmail.com",
         subject: `New Contact Form: ${name}`,
         text: `From: ${name} (${email})\n\nMessage:\n${message}`,

@@ -42,7 +42,7 @@ export default function ContactPage() {
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
             <Scissors className="w-5 h-5" />
-            <span className="text-xl font-bold">ClipKaro</span>
+            <span className="text-xl font-bold">Clipr</span>
           </Link>
           <Link href="/" className="text-sm text-gray-600 hover:underline">← Back to Home</Link>
         </div>
@@ -63,7 +63,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Social</p>
-                  <p>@clipkaro on Instagram, Twitter, YouTube</p>
+                  <p>@Clipr on Instagram, Twitter, YouTube</p>
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Response Time</p>
@@ -94,7 +94,7 @@ export default function ContactPage() {
       </motion.div>
 
       <footer className="border-t py-8 text-center text-sm text-gray-500">
-        <p>Made in India — © 2026 ClipKaro</p>
+        <p>Made in India — © 2026 Clipr</p>
       </footer>
     </div>
   )

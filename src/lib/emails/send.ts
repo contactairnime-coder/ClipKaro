@@ -1,4 +1,4 @@
-const FROM = "ClipKaro <noreply@clipkaro.in>"
+const FROM = "Clipr <noreply@clipr.in>"
 
 export async function sendEmail({
   to,

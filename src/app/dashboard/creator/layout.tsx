@@ -37,7 +37,7 @@ export default async function CreatorLayout({ children }: { children: React.Reac
       <aside className="hidden w-64 flex-col border-r bg-background md:flex">
         <div className="flex h-14 items-center border-b px-6">
           <Link href="/dashboard/creator" className="text-lg font-bold">
-            ClipKaro
+            Clipr
           </Link>
         </div>
         <nav className="flex-1 space-y-1 p-4">

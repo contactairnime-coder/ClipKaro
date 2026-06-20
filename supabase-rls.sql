@@ -1,4 +1,4 @@
--- ClipKaro Row Level Security (RLS) Policies
+-- Clipr Row Level Security (RLS) Policies
 -- Run these in Supabase Dashboard → SQL Editor
 -- NOTE: auth.uid() returns UUID, but Prisma creates columns as TEXT,
 -- so we cast auth.uid()::text for comparison.

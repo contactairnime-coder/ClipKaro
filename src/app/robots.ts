@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/dashboard/", "/api/", "/auth/"],
     },
-    sitemap: "https://clipkaro.in/sitemap.xml",
+    sitemap: "https://clipr.in/sitemap.xml",
   }
 }

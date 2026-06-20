@@ -1,6 +1,6 @@
-# Fix List — ClipKaro
+# Fix List — Clipr
 
-**App URL:** https://clip-karo-4wbs-qsw5cb71c-airnime.vercel.app
+**App URL:** https://clipr.vercel.app
 
 ---
 
@@ -38,6 +38,6 @@
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@clipkaro.com | Admin@123 |
-| Creator | creator@clipkaro.com | Creator@123 |
-| Clipper | clipper@clipkaro.com | Clipper@123 |
+| Admin | admin@clipr.com | Admin@123 |
+| Creator | creator@clipr.com | Creator@123 |
+| Clipper | clipper@clipr.com | Clipper@123 |

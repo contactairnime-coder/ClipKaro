@@ -32,7 +32,7 @@ export default async function ClipperLayout({ children }: { children: React.Reac
     <div className="flex min-h-screen">
       <aside className="hidden w-64 flex-col border-r bg-background md:flex">
         <div className="flex h-14 items-center border-b px-6">
-          <Link href="/dashboard/clipper" className="text-lg font-bold">ClipKaro</Link>
+          <Link href="/dashboard/clipper" className="text-lg font-bold">Clipr</Link>
         </div>
         <nav className="flex-1 space-y-1 p-4">
           {sidebarLinks.map((link) => (

@@ -33,7 +33,7 @@ async function findOrCreateUser(email: string, password: string, name: string) {
 async function seed() {
   console.log("Seeding...")
 
-  const adminUser = await findOrCreateUser("admin@clipkaro.in", "Admin@123", "Admin")
+  const adminUser = await findOrCreateUser("admin@clipr.in", "Admin@123", "Admin")
   await prisma.profile.upsert({
     where: { id: adminUser.id },
     update: { name: "Admin", role: "ADMIN", isVerified: true },
@@ -47,7 +47,7 @@ async function seed() {
   })
   console.log("✓ Admin created")
 
-  const creatorUser = await findOrCreateUser("creator@clipkaro.in", "Creator@123", "Karan Soni")
+  const creatorUser = await findOrCreateUser("creator@clipr.in", "Creator@123", "Karan Soni")
   await prisma.profile.upsert({
     where: { id: creatorUser.id },
     update: { name: "Karan Soni", role: "CREATOR", isVerified: true },
@@ -72,7 +72,7 @@ async function seed() {
   })
   console.log("✓ Creator created")
 
-  const clipperUser = await findOrCreateUser("clipper@clipkaro.in", "Clipper@123", "Rahul Sharma")
+  const clipperUser = await findOrCreateUser("clipper@clipr.in", "Clipper@123", "Rahul Sharma")
   await prisma.profile.upsert({
     where: { id: clipperUser.id },
     update: { name: "Rahul Sharma", role: "CLIPPER", upiId: "rahul@paytm", isVerified: true },

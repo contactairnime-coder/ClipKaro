@@ -41,12 +41,12 @@ export function createEmailWorker() {
         case "CAMPAIGN_ACTIVATED":
           await sendEmail({
             to,
-            subject: `[ClipKaro] Campaign Activated — ${String(data.campaignTitle || "")}`,
+            subject: `[Clipr] Campaign Activated — ${String(data.campaignTitle || "")}`,
             html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
               <h2 style="color:#059669;">Campaign Live!</h2>
               <p>Your campaign <strong>${String(data.campaignTitle)}</strong> is now active.</p>
               <p>Clippers can now submit their clips. Track progress in your dashboard.</p>
-              <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://clipkaro.in"}/dashboard/creator/campaigns/${String(data.campaignId || "")}" style="display:inline-block;background:#059669;color:white;padding:10px 20px;text-decoration:none;border-radius:6px;">View Campaign</a></p>
+              <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://clipr.in"}/dashboard/creator/campaigns/${String(data.campaignId || "")}" style="display:inline-block;background:#059669;color:white;padding:10px 20px;text-decoration:none;border-radius:6px;">View Campaign</a></p>
             </div>`,
           })
           break
@@ -54,7 +54,7 @@ export function createEmailWorker() {
         case "PAYOUT_PROCESSED":
           await sendEmail({
             to,
-            subject: `[ClipKaro] Payout Processed — ₹${Number(data.amount || 0).toLocaleString()}`,
+            subject: `[Clipr] Payout Processed — ₹${Number(data.amount || 0).toLocaleString()}`,
             html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
               <h2 style="color:#059669;">Payout Processed!</h2>
               <p>Your payout of <strong>₹${Number(data.amount || 0).toLocaleString()}</strong> has been processed.</p>
@@ -66,11 +66,11 @@ export function createEmailWorker() {
         case "WELCOME":
           await sendEmail({
             to,
-            subject: `Welcome to ClipKaro! Start Earning Today`,
+            subject: `Welcome to Clipr! Start Earning Today`,
             html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
-              <h2 style="color:#059669;">Welcome to ClipKaro!</h2>
+              <h2 style="color:#059669;">Welcome to Clipr!</h2>
               <p>You've joined India's first clipping platform.</p>
-              <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://clipkaro.in"}/dashboard" style="display:inline-block;background:#059669;color:white;padding:10px 20px;text-decoration:none;border-radius:6px;">Go to Dashboard</a></p>
+              <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://clipr.in"}/dashboard" style="display:inline-block;background:#059669;color:white;padding:10px 20px;text-decoration:none;border-radius:6px;">Go to Dashboard</a></p>
             </div>`,
           })
           break

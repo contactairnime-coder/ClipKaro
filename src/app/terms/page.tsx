@@ -11,7 +11,7 @@ export default function TermsPage() {
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
             <Scissors className="w-5 h-5" />
-            <span className="text-xl font-bold">ClipKaro</span>
+            <span className="text-xl font-bold">Clipr</span>
           </Link>
           <Link href="/" className="text-sm text-gray-600 hover:underline">← Back to Home</Link>
         </div>
@@ -25,12 +25,12 @@ export default function TermsPage() {
           <div className="mt-8 space-y-6 text-gray-600 leading-relaxed">
             <section>
               <h2 className="text-xl font-semibold text-gray-900">1. Acceptance of Terms</h2>
-              <p className="mt-2">By using ClipKaro, you agree to these terms. If you do not agree, do not use the platform.</p>
+              <p className="mt-2">By using Clipr, you agree to these terms. If you do not agree, do not use the platform.</p>
             </section>
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900">2. Eligibility</h2>
-              <p className="mt-2">You must be at least 18 years old and a resident of India to use ClipKaro. You must have a valid UPI ID to receive payments.</p>
+              <p className="mt-2">You must be at least 18 years old and a resident of India to use Clipr. You must have a valid UPI ID to receive payments.</p>
             </section>
 
             <section>
@@ -56,7 +56,7 @@ export default function TermsPage() {
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900">6. Limitation of Liability</h2>
-              <p className="mt-2">ClipKaro is not responsible for any losses arising from the use of the platform. We provide the platform as-is and may modify or discontinue services at any time.</p>
+              <p className="mt-2">Clipr is not responsible for any losses arising from the use of the platform. We provide the platform as-is and may modify or discontinue services at any time.</p>
             </section>
 
             <section>
@@ -68,7 +68,7 @@ export default function TermsPage() {
       </motion.div>
 
       <footer className="border-t py-8 text-center text-sm text-gray-500">
-        <p>Made in India — © 2026 ClipKaro</p>
+        <p>Made in India — © 2026 Clipr</p>
       </footer>
     </div>
   )

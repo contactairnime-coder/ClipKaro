@@ -1,4 +1,4 @@
--- ClipKaro Database Indexes
+-- Clipr Database Indexes
 -- Run this in Supabase Dashboard SQL Editor
 -- Adds indexes for 10k+ user scalability
 

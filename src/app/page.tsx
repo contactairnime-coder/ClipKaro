@@ -16,8 +16,8 @@ const sections = [
 ]
 
 const faqs = [
-  { q: "Clipping kya hota hai?", a: "Clipping ka matlab hota hai kisi bade video (long-form) se chhota, engaging clip banana aur social media par share karna. ClipKaro pe creators apne videos ke liye clippers ko bounty dete hain." },
-  { q: "Kya yeh free hai join karna?", a: "Haan, bilkul free! ClipKaro join karna aur clipper banna completely free hai. Koi monthly fee, koi hidden charges nahi." },
+  { q: "Clipping kya hota hai?", a: "Clipping ka matlab hota hai kisi bade video (long-form) se chhota, engaging clip banana aur social media par share karna. Clipr pe creators apne videos ke liye clippers ko bounty dete hain." },
+  { q: "Kya yeh free hai join karna?", a: "Haan, bilkul free! Clipr join karna aur clipper banna completely free hai. Koi monthly fee, koi hidden charges nahi." },
   { q: "Kya mobile se kaam kar sakte hain?", a: "Haan! Aap mobile se bhi pura process kar sakte hain. CapCut mobile app se clip banao, upload karo aur submit karo. Sab mobile-friendly hai." },
   { q: "Payment kaise milega?", a: "Payment seedha aapke UPI ID par aata hai. Jab aapki clips views generate karengi, aapki earnings calculate hoti hai aur aap withdraw kar sakte hain." },
   { q: "Minimum withdrawal kitna hai?", a: "Minimum withdrawal ₹500 hai. Jaise hi aapki earnings ₹500 se zyada hoti hai, aap withdraw request kar sakte hain." },
@@ -29,7 +29,7 @@ const faqs = [
 const testimonials = [
   {
     name: "Rahul Sharma", city: "Delhi", role: "Top Clipper",
-    text: "Maine socha nahi tha ki clipping se itna earn kar paunga. Roz 2-3 clips banata hoon aur ₹15-18k/month kama leta hoon. ClipKaro ne meri zindagi badal di!",
+    text: "Maine socha nahi tha ki clipping se itna earn kar paunga. Roz 2-3 clips banata hoon aur ₹15-18k/month kama leta hoon. Clipr ne meri zindagi badal di!",
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD99Kar7S6HeeYKN4JXV7rnUFPddt0pQcB53Kshk0kQ4OwVegqv8WMH0acdGv3NexpglOiOjTpKXn5C8syoWCRyYFTrgbKr7GmZtZM4D6HG3xo8YTGc5IgkZe-ENmwpAwj2_GaR21vX_vbnEiZWsWhN14Skab3LKqAuZc0GLdtFI_K8ZLWDoocrJnRwd6U3PHX4cwOa6m30iYSdb7IHtoHI8xjjU7dL2zimYyjayxEXuFye4X9zndvYX1lCFjLeulVNcxqJMAF7SzI",
     initial: "RS",
   },
@@ -151,7 +151,7 @@ function Navbar() {
       <div className="mx-auto max-w-7xl px-4 md:px-8 flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Scissors className="w-6 h-6 text-green-400" />
-          <span className="text-xl font-extrabold text-white">ClipKaro</span>
+          <span className="text-xl font-extrabold text-white">Clipr</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
@@ -1063,7 +1063,7 @@ function Footer() {
           <div className="max-w-sm text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-6">
               <Scissors className="w-6 h-6 text-green-400" />
-              <span className="text-2xl font-bold text-white">ClipKaro</span>
+              <span className="text-2xl font-bold text-white">Clipr</span>
             </div>
             <p className="text-gray-500 text-sm mb-8">India ka pehla clipping platform. Indian creators ke clips banao, views kamao, ₹ kamao.</p>
             <div className="flex justify-center md:justify-start gap-4">
@@ -1106,7 +1106,7 @@ function Footer() {
           </div>
         </div>
         <div className="pt-8 border-t border-[#1f1f1f] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-600">
-          <div>&copy; 2026 ClipKaro. All rights reserved.</div>
+          <div>&copy; 2026 Clipr. All rights reserved.</div>
           <div>Made in India with ❤️ for the Creator Economy</div>
         </div>
       </div>

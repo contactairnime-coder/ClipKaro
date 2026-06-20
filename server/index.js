@@ -13,5 +13,5 @@ app.get("/health", (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`ClipKaro API server running on port ${PORT}`)
+  console.log(`Clipr API server running on port ${PORT}`)
 })
