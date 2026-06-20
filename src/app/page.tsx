@@ -6,7 +6,7 @@ import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { Scissors, Search, Megaphone, Users, TrendingUp, Target, BarChart3, Star, Camera, Music, Play, ChevronDown, ArrowRight, Wallet, Zap, Globe, Share2, Monitor, Clock, ShieldCheck, Sparkles, Timer, CheckCircle2 } from "lucide-react"
 
-const words = ["Clips banao", "Views aao", "₹ aao"]
+const words = ["Clips banao", "Views lao", "Paisa kamao"]
 
 const sections = [
   { id: "how-it-works", label: "How it Works" },
