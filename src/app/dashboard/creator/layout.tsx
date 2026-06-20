@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
@@ -36,7 +37,8 @@ export default async function CreatorLayout({ children }: { children: React.Reac
     <div className="flex min-h-screen">
       <aside className="hidden w-64 flex-col border-r bg-background md:flex">
         <div className="flex h-14 items-center border-b px-6">
-          <Link href="/dashboard/creator" className="text-lg font-bold">
+          <Link href="/dashboard/creator" className="flex items-center gap-2 text-lg font-bold">
+            <Image src="/logo.png" alt="Clipr" width={24} height={24} className="w-6 h-6" />
             Clipr
           </Link>
         </div>

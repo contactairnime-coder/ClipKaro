@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
-import { Scissors } from "lucide-react"
 import { toast } from "sonner"
 
 export default function ContactPage() {
@@ -41,7 +41,7 @@ export default function ContactPage() {
       <header className="border-b">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <Scissors className="w-5 h-5" />
+            <Image src="/logo.png" alt="Clipr" width={24} height={24} className="w-6 h-6" />
             <span className="text-xl font-bold">Clipr</span>
           </Link>
           <Link href="/" className="text-sm text-gray-600 hover:underline">← Back to Home</Link>

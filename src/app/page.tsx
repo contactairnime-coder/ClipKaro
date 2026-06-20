@@ -150,7 +150,7 @@ function Navbar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-[#1f1f1f]" : "bg-transparent"}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-8 flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Scissors className="w-6 h-6 text-green-400" />
+          <Image src="/logo.png" alt="Clipr" width={28} height={28} className="w-7 h-7" />
           <span className="text-xl font-extrabold text-white">Clipr</span>
         </Link>
 
@@ -1062,7 +1062,7 @@ function Footer() {
         <div className="flex flex-col md:flex-row justify-between mb-16 gap-12">
           <div className="max-w-sm text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-6">
-              <Scissors className="w-6 h-6 text-green-400" />
+              <Image src="/logo.png" alt="Clipr" width={32} height={32} className="w-8 h-8" />
               <span className="text-2xl font-bold text-white">Clipr</span>
             </div>
             <p className="text-gray-500 text-sm mb-8">India ka pehla clipping platform. Indian creators ke clips banao, views kamao, ₹ kamao.</p>
