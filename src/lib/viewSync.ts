@@ -76,11 +76,25 @@ export async function syncSubmissionViews(submissionId: string) {
         data: { totalEarned: { increment: diff } },
       })
     } else {
-      await prisma.campaign.update({
-        where: { id: submission.campaignId, remainingBounty: { lt: diff } },
-        data: { remainingBounty: 0, status: "COMPLETED" },
-      })
-      console.warn(`Bounty exhausted for campaign ${submission.campaignId}, earnings capped`)
+      const partial = submission.campaign.remainingBounty
+      if (partial > 0) {
+        await prisma.$transaction([
+          prisma.campaign.update({
+            where: { id: submission.campaignId, remainingBounty: { gte: partial } },
+            data: { remainingBounty: 0, status: "COMPLETED" },
+          }),
+          prisma.profile.update({
+            where: { id: submission.clipperId },
+            data: { totalEarned: { increment: partial } },
+          }),
+        ])
+      } else {
+        await prisma.campaign.update({
+          where: { id: submission.campaignId },
+          data: { status: "COMPLETED" },
+        })
+      }
+      console.warn(`Bounty exhausted for campaign ${submission.campaignId}, paid partial ${partial}`)
     }
   }
 

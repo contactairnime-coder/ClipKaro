@@ -32,6 +32,10 @@ export default function CreateCampaignPage() {
     guidelines: "",
     startDate: "",
     endDate: "",
+    minPayout: "",
+    maxPayout: "",
+    flatFeeBonus: "",
+    autoApproveHours: "48",
   })
 
   const bountyTotal = Number(form.bountyTotal) || 0
@@ -60,7 +64,14 @@ export default function CreateCampaignPage() {
       const res = await fetch("/api/campaigns", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, allowedPlatforms: selectedPlatforms }),
+        body: JSON.stringify({
+          ...form,
+          allowedPlatforms: selectedPlatforms,
+          minPayout: form.minPayout || null,
+          maxPayout: form.maxPayout || null,
+          flatFeeBonus: form.flatFeeBonus || null,
+          autoApproveHours: form.autoApproveHours || null,
+        }),
       })
 
       if (!res.ok) throw new Error("Failed to create campaign")
@@ -120,6 +131,23 @@ export default function CreateCampaignPage() {
                     <div className="flex justify-between font-bold"><span>Total Cost</span><span>₹{totalCost.toLocaleString()}</span></div>
                   </div>
                 </div>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="minPayout">Min Payout per Video (₹)</Label>
+                    <Input id="minPayout" type="number" min="0" placeholder="e.g. 50" value={form.minPayout} onChange={(e) => updateField("minPayout", e.target.value)} />
+                    <p className="text-xs text-muted-foreground">Min earnings before submission goes for review. ₹0 = every submission reviewed</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="maxPayout">Max Payout per Video (₹)</Label>
+                    <Input id="maxPayout" type="number" min="0" placeholder="e.g. 3000" value={form.maxPayout} onChange={(e) => updateField("maxPayout", e.target.value)} />
+                    <p className="text-xs text-muted-foreground">Cap per video to protect your budget</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="flatFeeBonus">Flat Fee Bonus (₹)</Label>
+                    <Input id="flatFeeBonus" type="number" min="0" placeholder="e.g. 100" value={form.flatFeeBonus} onChange={(e) => updateField("flatFeeBonus", e.target.value)} />
+                    <p className="text-xs text-muted-foreground">Extra bonus per approved submission</p>
+                  </div>
+                </div>
               </div>
             )},
             { title: "Platform Rules", content: (
@@ -148,6 +176,11 @@ export default function CreateCampaignPage() {
                 <div className="space-y-2">
                   <Label htmlFor="guidelines">Guidelines for Clippers</Label>
                   <Textarea id="guidelines" placeholder="Any specific instructions for clippers..." value={form.guidelines} onChange={(e) => updateField("guidelines", e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="autoApproveHours">Auto-Approve After (hours)</Label>
+                  <Input id="autoApproveHours" type="number" min="0" placeholder="48" value={form.autoApproveHours} onChange={(e) => updateField("autoApproveHours", e.target.value)} />
+                  <p className="text-xs text-muted-foreground">0 = no auto-approve (manual only). Default 48 hours (Whop jaisa)</p>
                 </div>
               </div>
             )},

@@ -18,7 +18,7 @@ export async function GET() {
       totalPaid: totalPaid._sum.amount || 0,
       clippers,
       activeCampaigns,
-      minPayout: 500,
+      minPayout: 100,
     })
   } catch (error) {
     console.error("Stats error:", error)

@@ -107,6 +107,10 @@ model Campaign {
   guidelines         String?         @db.Text @map("guidelines")
   startDate          DateTime?       @map("start_date")
   endDate            DateTime?       @map("end_date")
+  minPayout          Float?          @map("min_payout")
+  maxPayout          Float?          @map("max_payout")
+  flatFeeBonus       Float?          @map("flat_fee_bonus")
+  autoApproveHours   Int?            @default(48) @map("auto_approve_hours")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
 

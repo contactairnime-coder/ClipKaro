@@ -20,18 +20,22 @@ export async function POST(request: Request, { params }: { params: { submissionI
   }
 
   if (overrideAction === "approve") {
+    const earnings = submission.earningsCalculated
+    if (earnings > submission.campaign.remainingBounty) {
+      return NextResponse.json({ error: "Insufficient campaign budget" }, { status: 400 })
+    }
     await prisma.$transaction([
       prisma.submission.update({
         where: { id: params.submissionId },
         data: { status: "APPROVED" },
       }),
       prisma.campaign.update({
-        where: { id: submission.campaignId },
-        data: { remainingBounty: { decrement: submission.earningsCalculated } },
+        where: { id: submission.campaignId, remainingBounty: { gte: earnings } },
+        data: { remainingBounty: { decrement: earnings } },
       }),
       prisma.profile.update({
         where: { id: submission.clipperId },
-        data: { totalEarned: { increment: submission.earningsCalculated } },
+        data: { totalEarned: { increment: earnings } },
       }),
       prisma.fraudFlag.updateMany({
         where: { submissionId: params.submissionId, isResolved: false },

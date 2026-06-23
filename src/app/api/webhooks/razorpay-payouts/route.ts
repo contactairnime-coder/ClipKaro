@@ -22,10 +22,19 @@ export async function POST(request: Request) {
         const existing = await prisma.payout.findFirst({
           where: { razorpayPayoutId: payoutId },
         })
-        if (existing) {
+        if (existing && existing.status !== "PAID") {
           await prisma.payout.update({
             where: { id: existing.id },
             data: { status: "PAID", paidAt: new Date() },
+          })
+
+          await prisma.submission.updateMany({
+            where: {
+              clipperId: existing.clipperId,
+              status: "APPROVED",
+              earningsCalculated: { gt: 0 },
+            },
+            data: { status: "PAID" },
           })
         }
         break
@@ -38,17 +47,27 @@ export async function POST(request: Request) {
         const existing = await prisma.payout.findFirst({
           where: { razorpayPayoutId: payoutId },
         })
-        if (existing) {
-          await prisma.$transaction([
-            prisma.payout.update({
-              where: { id: existing.id },
-              data: { status: "FAILED" },
-            }),
-            prisma.profile.update({
-              where: { id: existing.clipperId },
-              data: { totalWithdrawn: { decrement: existing.amount } },
-            }),
-          ])
+        if (existing && existing.status !== "FAILED") {
+          await prisma.$transaction(async (tx) => {
+            const [profile] = await tx.$queryRawUnsafe<Array<{ total_withdrawn: number }>>(
+              `SELECT total_withdrawn FROM profiles WHERE id = $1 FOR UPDATE`,
+              existing.clipperId
+            )
+            if (!profile) return
+            const amount = existing.amount
+            const withdrawn = Number(profile.total_withdrawn)
+            if (withdrawn >= amount) {
+              await tx.payout.update({
+                where: { id: existing.id },
+                data: { status: "FAILED" },
+              })
+              await tx.$executeRawUnsafe(
+                `UPDATE profiles SET total_withdrawn = total_withdrawn - $1 WHERE id = $2 AND total_withdrawn >= $1`,
+                amount,
+                existing.clipperId
+              )
+            }
+          })
         }
         break
       }

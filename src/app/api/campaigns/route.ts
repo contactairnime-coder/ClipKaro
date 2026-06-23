@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { title, description, sourceVideoUrl, bountyTotal, bountyPerLakhViews, allowedPlatforms, minClipDuration, maxClipDuration, guidelines, startDate, endDate } = body
+    const { title, description, sourceVideoUrl, bountyTotal, bountyPerLakhViews, allowedPlatforms, minClipDuration, maxClipDuration, guidelines, startDate, endDate, minPayout, maxPayout, flatFeeBonus, autoApproveHours } = body
 
     const platformFee = Math.round(bountyTotal * 0.15)
 
@@ -88,6 +88,10 @@ export async function POST(request: Request) {
         guidelines: guidelines || null,
         startDate: startDate ? new Date(startDate) : null,
         endDate: endDate ? new Date(endDate) : null,
+        minPayout: minPayout ? Number(minPayout) : null,
+        maxPayout: maxPayout ? Number(maxPayout) : null,
+        flatFeeBonus: flatFeeBonus ? Number(flatFeeBonus) : null,
+        autoApproveHours: autoApproveHours ? Number(autoApproveHours) : 48,
         creatorId: user.id,
       },
     })

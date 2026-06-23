@@ -28,6 +28,17 @@ export async function createOrder(amountInPaise: number, receipt: string, notes?
   })
 }
 
+export async function fetchOrder(orderId: string) {
+  return getInstance().orders.fetch(orderId) as Promise<{
+    id: string
+    amount: number
+    currency: string
+    receipt: string
+    status: string
+    notes: Record<string, string>
+  }>
+}
+
 export function verifyPaymentSignature(orderId: string, paymentId: string, signature: string) {
   return validatePaymentVerification(
     { order_id: orderId, payment_id: paymentId },

@@ -3,9 +3,11 @@ import { createFraudCheckWorker } from "./workers/fraudCheckWorker"
 import { createEarningsWorker } from "./workers/earningsWorker"
 import { createEmailWorker } from "./workers/emailWorker"
 import { createPayoutWorker } from "./workers/payoutWorker"
+import { createAutoApproveWorker } from "./workers/autoApproveWorker"
 import { startViewSyncScheduler } from "./schedulers/viewSyncScheduler"
 import { startCampaignStatusScheduler } from "./schedulers/campaignStatusScheduler"
 import { startPayoutScheduler } from "./schedulers/payoutScheduler"
+import { startAutoApproveScheduler } from "./schedulers/autoApproveScheduler"
 import { closeAllQueues } from "./queues"
 import type { Worker } from "bullmq"
 
@@ -19,14 +21,16 @@ export function startQueues() {
     createFraudCheckWorker(),
     createEarningsWorker(),
     createEmailWorker(),
-    createPayoutWorker()
+    createPayoutWorker(),
+    createAutoApproveWorker()
   )
 
   startViewSyncScheduler()
   startCampaignStatusScheduler()
   startPayoutScheduler()
+  startAutoApproveScheduler()
 
-  console.log(`[Queue] ${workers.length} workers started, 3 schedulers started`)
+  console.log(`[Queue] ${workers.length} workers started, 4 schedulers started`)
 }
 
 export async function stopQueues() {

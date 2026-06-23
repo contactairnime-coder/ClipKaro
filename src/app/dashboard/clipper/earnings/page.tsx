@@ -66,8 +66,8 @@ export default function EarningsPage() {
 
   async function handleWithdraw(e: React.FormEvent) {
     e.preventDefault()
-    if (!withdrawAmount || Number(withdrawAmount) < 500) {
-      toast.error("Minimum withdrawal is ₹500")
+    if (!withdrawAmount || Number(withdrawAmount) < 100) {
+      toast.error("Minimum withdrawal is ₹100")
       return
     }
     if (!withdrawUpi) {
@@ -161,19 +161,19 @@ export default function EarningsPage() {
                 <label className="text-sm font-medium">Amount (₹)</label>
                 <Input
                   type="number"
-                  min="500"
+                  min="100"
                   max={availableBalance}
-                  placeholder="Min. ₹500"
+                  placeholder="Min. ₹100"
                   value={withdrawAmount}
                   onChange={(e) => setWithdrawAmount(e.target.value)}
                   required
                 />
               </div>
-              <Button type="submit" disabled={withdrawing || availableBalance < 500}>
+              <Button type="submit" disabled={withdrawing || availableBalance < 100}>
                 {withdrawing ? "Processing..." : "Withdraw"}
               </Button>
-              {availableBalance < 500 && (
-                <p className="text-xs text-destructive">Minimum balance of ₹500 required for withdrawal</p>
+              {availableBalance < 100 && (
+                <p className="text-xs text-destructive">Minimum balance of ₹100 required for withdrawal</p>
               )}
             </form>
           </CardContent>

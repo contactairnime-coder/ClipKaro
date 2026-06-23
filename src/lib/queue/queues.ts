@@ -11,6 +11,7 @@ let fraudCheckQueue: Queue
 let earningsQueue: Queue
 let emailQueue: Queue
 let payoutQueue: Queue
+let autoApproveQueue: Queue
 
 function getConnection() {
   return { connection: getRedisConnection(), defaultJobOptions }
@@ -41,7 +42,12 @@ export function getPayoutQueue() {
   return payoutQueue
 }
 
+export function getAutoApproveQueue() {
+  if (!autoApproveQueue) autoApproveQueue = new Queue("auto-approve", getConnection())
+  return autoApproveQueue
+}
+
 export async function closeAllQueues() {
-  const queues = [viewSyncQueue, fraudCheckQueue, earningsQueue, emailQueue, payoutQueue].filter(Boolean)
+  const queues = [viewSyncQueue, fraudCheckQueue, earningsQueue, emailQueue, payoutQueue, autoApproveQueue].filter(Boolean)
   await Promise.all(queues.map((q) => q!.close()))
 }

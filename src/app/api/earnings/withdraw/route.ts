@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { prisma } from "@/lib/prisma"
+import { getPayoutQueue } from "@/lib/queue/queues"
 
 export async function POST(request: Request) {
   try {
@@ -11,8 +12,8 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { amount, upiId } = body
 
-    if (!amount || amount < 500) {
-      return NextResponse.json({ error: "Minimum withdrawal is ₹500" }, { status: 400 })
+    if (!amount || amount < 100) {
+      return NextResponse.json({ error: "Minimum withdrawal is ₹100" }, { status: 400 })
     }
     if (!upiId) {
       return NextResponse.json({ error: "UPI ID is required" }, { status: 400 })
@@ -57,6 +58,12 @@ export async function POST(request: Request) {
 
       return payout
     })
+
+    try {
+      await getPayoutQueue().add("payout", { payoutId: payout.id })
+    } catch (e) {
+      console.warn("[Withdraw] Failed to queue payout instantly, will be picked by scheduler:", e)
+    }
 
     return NextResponse.json(payout, { status: 201 })
   } catch (error) {

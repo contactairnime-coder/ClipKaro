@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { Scissors, Search, Megaphone, Users, TrendingUp, Target, BarChart3, Star, Camera, Music, Play, ChevronDown, ArrowRight, Wallet, Zap, Globe, Share2, Monitor, Clock, ShieldCheck, Sparkles, Timer, CheckCircle2 } from "lucide-react"
 
 const words = ["Clips banao", "Views lao", "Paisa kamao"]
@@ -20,8 +20,8 @@ const faqs = [
   { q: "Kya yeh free hai join karna?", a: "Haan, bilkul free! Clipr join karna aur clipper banna completely free hai. Koi monthly fee, koi hidden charges nahi." },
   { q: "Kya mobile se kaam kar sakte hain?", a: "Haan! Aap mobile se bhi pura process kar sakte hain. CapCut mobile app se clip banao, upload karo aur submit karo. Sab mobile-friendly hai." },
   { q: "Payment kaise milega?", a: "Payment seedha aapke UPI ID par aata hai. Jab aapki clips views generate karengi, aapki earnings calculate hoti hai aur aap withdraw kar sakte hain." },
-  { q: "Minimum withdrawal kitna hai?", a: "Minimum withdrawal ₹500 hai. Jaise hi aapki earnings ₹500 se zyada hoti hai, aap withdraw request kar sakte hain." },
-  { q: "Kitne time mein paise milte hain?", a: "Withdraw request ke baad, admin verification hoti hai aur phir Razorpay ke through UPI par payment bhej di jaati hai. Aam taur par 2-3 working days lagte hain." },
+  { q: "Minimum withdrawal kitna hai?", a: "Minimum withdrawal ₹100 hai. Jaise hi aapki earnings ₹100 se zyada hoti hai, aap withdraw request kar sakte hain." },
+  { q: "Kitne time mein paise milte hain?", a: "Withdraw request ke baad, aapke paise directly UPI par bhej diye jaate hain. Hamara system har 15 minute mein payouts process karta hai, toh aam taur par 15-30 minutes mein paise aa jaate hain!" },
   { q: "Kya CapCut free hai?", a: "Haan, CapCut bilkul free hai. Aap mobile ya PC dono par CapCut use kar sakte hain. Isse clipping karna bahut easy ho jata hai." },
   { q: "Ek din mein kitne clips submit kar sakte hain?", a: "Koi limit nahi hai! Aap jitne chahe utne clips submit kar sakte hain. Har clip ki alag earning hogi views ke hisaab se." },
 ]
@@ -339,7 +339,7 @@ function StatsBar() {
   const { count: paidOut, ref: paidRef } = useCountUp(240000)
   const { count: clippers, ref: clipperRef } = useCountUp(240)
   const { count: campaigns, ref: campaignRef } = useCountUp(12)
-  const { count: minPayout, ref: payoutRef } = useCountUp(500)
+  const { count: minPayout, ref: payoutRef } = useCountUp(100)
 
   const formatCr = (val: number) => (val / 100000).toFixed(1)
 
@@ -980,21 +980,15 @@ function FAQSection() {
                 <span>{faq.q}</span>
                 <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${openIndex === i ? "rotate-180" : ""}`} />
               </button>
-              <AnimatePresence>
-                {openIndex === i && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-6 pb-6 pt-2 text-gray-400 leading-relaxed">
-                      {faq.a}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <motion.div
+                animate={{ height: openIndex === i ? "auto" : 0, opacity: openIndex === i ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <div className="px-6 pb-6 pt-2 text-gray-400 leading-relaxed">
+                  {faq.a}
+                </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>

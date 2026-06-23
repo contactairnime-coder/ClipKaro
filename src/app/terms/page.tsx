@@ -46,7 +46,7 @@ export default function TermsPage() {
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900">4. Payments & Fees</h2>
-              <p className="mt-2">Creators pay a 15% platform fee on top of the bounty amount. Clippers receive earnings based on verified view counts. Minimum withdrawal is ₹500.</p>
+              <p className="mt-2">Creators pay a 15% platform fee on top of the bounty amount. Clippers receive earnings based on verified view counts. Minimum withdrawal is ₹100.</p>
             </section>
 
             <section>

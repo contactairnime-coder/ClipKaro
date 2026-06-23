@@ -35,6 +35,10 @@ COMMAND.MD
 # vercel
 .vercel
 
+# windows
+desktop.ini
+Thumbs.db
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

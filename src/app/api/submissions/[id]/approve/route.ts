@@ -19,6 +19,10 @@ async function handleApprove(request: Request, params: { id: string }) {
 
   const earnings = Math.round(submission.viewCount * submission.campaign.bountyPerLakhViews / 100000)
 
+  if (earnings > submission.campaign.remainingBounty) {
+    return Response.json({ error: "Insufficient campaign budget" }, { status: 400 })
+  }
+
   await prisma.$transaction([
     prisma.submission.update({
       where: { id: params.id },
@@ -29,7 +33,7 @@ async function handleApprove(request: Request, params: { id: string }) {
       data: { totalEarned: { increment: earnings } },
     }),
     prisma.campaign.update({
-      where: { id: submission.campaignId },
+      where: { id: submission.campaignId, remainingBounty: { gte: earnings } },
       data: { remainingBounty: { decrement: earnings } },
     }),
     prisma.transaction.create({

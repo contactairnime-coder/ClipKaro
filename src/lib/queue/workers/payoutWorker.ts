@@ -49,9 +49,21 @@ export function createPayoutWorker() {
 
       await prisma.payout.update({
         where: { id: payoutId },
-        data: {
-          razorpayPayoutId: razorpayPayout.id,
+        data: { razorpayPayoutId: razorpayPayout.id },
+      })
+
+      await prisma.payout.update({
+        where: { id: payoutId },
+        data: { status: "PAID", paidAt: new Date() },
+      })
+
+      await prisma.submission.updateMany({
+        where: {
+          clipperId: payout.clipperId,
+          status: "APPROVED",
+          earningsCalculated: { gt: 0 },
         },
+        data: { status: "PAID" },
       })
 
       await getEmailQueue().add("payout-processed", {

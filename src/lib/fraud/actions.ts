@@ -31,16 +31,19 @@ export async function handleFraudResult(
           },
         })
 
-        await prisma.$transaction([
-          prisma.campaign.update({
-            where: { id: submission.campaignId },
-            data: { remainingBounty: { decrement: submission.earningsCalculated } },
-          }),
-          prisma.profile.update({
-            where: { id: submission.clipperId },
-            data: { totalEarned: { increment: submission.earningsCalculated } },
-          }),
-        ])
+        const earnings = submission.earningsCalculated
+        if (earnings <= submission.campaign.remainingBounty) {
+          await prisma.$transaction([
+            prisma.campaign.update({
+              where: { id: submission.campaignId, remainingBounty: { gte: earnings } },
+              data: { remainingBounty: { decrement: earnings } },
+            }),
+            prisma.profile.update({
+              where: { id: submission.clipperId },
+              data: { totalEarned: { increment: earnings } },
+            }),
+          ])
+        }
       }
       return {
         submissionId,
