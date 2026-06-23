@@ -34,6 +34,7 @@ export default function AdminQueue() {
     fetch("/api/admin/queue/stats")
       .then((r) => r.json())
       .then(setData)
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 

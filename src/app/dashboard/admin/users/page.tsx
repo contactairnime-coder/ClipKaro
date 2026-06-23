@@ -31,8 +31,13 @@ export default function AdminUsers() {
   const [bannedIds, setBannedIds] = useState<Set<string>>(new Set())
 
   const fetchUsers = useCallback(async () => {
-    const res = await fetch("/api/admin/users")
-    if (res.ok) setUsers(await res.json())
+    try {
+      const res = await fetch("/api/admin/users")
+      if (res.ok) {
+        const data = await res.json()
+        setUsers(data.users || [])
+      }
+    } catch {}
   }, [])
 
   useEffect(() => {

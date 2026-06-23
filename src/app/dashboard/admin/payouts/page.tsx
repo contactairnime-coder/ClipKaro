@@ -32,11 +32,11 @@ export default function AdminPayouts() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/admin/payouts/pending").then((r) => r.json()),
-      fetch("/api/earnings/withdraw/history").then((r) => r.json()),
+      fetch("/api/admin/payouts/pending").then((r) => r.json()).catch(() => ({ payouts: [] })),
+      fetch("/api/admin/payouts/all").then((r) => r.json()).catch(() => ({ payouts: [] })),
     ]).then(([p, h]) => {
-      setPending(p)
-      setHistory(h)
+      setPending(p.payouts || [])
+      setHistory(h.payouts || [])
     }).finally(() => setLoading(false))
   }, [])
 

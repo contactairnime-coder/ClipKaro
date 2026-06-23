@@ -28,6 +28,7 @@ export default function AdminOverview() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [activity, setActivity] = useState<Activity | null>(null)
   const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
 
   useEffect(() => {
     fetch("/api/admin/stats")
@@ -36,6 +37,7 @@ export default function AdminOverview() {
         setStats(data.stats)
         setActivity(data.activity)
       })
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 
@@ -78,17 +80,25 @@ export default function AdminOverview() {
               Sync view counts for all approved submissions from YouTube, Instagram, and TikTok.
             </p>
             <Button
+              disabled={syncing}
               onClick={async () => {
-                const res = await fetch("/api/admin/sync-all-views", { method: "POST" })
-                const data = await res.json()
-                if (res.ok) {
-                  toast.success(`Synced ${data.syncedCount} submissions, ${(data.totalViews || 0).toLocaleString()} views`)
-                } else {
-                  toast.error(data.error || "Failed to sync")
+                setSyncing(true)
+                try {
+                  const res = await fetch("/api/admin/sync-all-views", { method: "POST" })
+                  const data = await res.json().catch(() => ({}))
+                  if (res.ok) {
+                    toast.success(`Synced ${data.syncedCount} submissions, ${(data.totalViews || 0).toLocaleString()} views`)
+                  } else {
+                    toast.error(data.error || "Failed to sync")
+                  }
+                } catch {
+                  toast.error("Failed to sync views")
+                } finally {
+                  setSyncing(false)
                 }
               }}
             >
-              Sync All Views Now
+              {syncing ? "Syncing..." : "Sync All Views Now"}
             </Button>
           </CardContent>
         </Card>

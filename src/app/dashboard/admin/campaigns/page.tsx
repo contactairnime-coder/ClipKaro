@@ -34,11 +34,11 @@ export default function AdminCampaigns() {
 
   const fetchData = useCallback(async () => {
     const [p, a] = await Promise.all([
-      fetch("/api/admin/campaigns/pending").then((r) => r.json()),
-      fetch("/api/admin/campaigns/all").then((r) => r.json()),
+      fetch("/api/admin/campaigns/pending").then((r) => r.json()).catch(() => ({ campaigns: [] })),
+      fetch("/api/admin/campaigns/all").then((r) => r.json()).catch(() => ({ campaigns: [] })),
     ])
-    if (Array.isArray(p)) setPending(p)
-    if (Array.isArray(a)) setAllCampaigns(a)
+    setPending(p.campaigns || [])
+    setAllCampaigns(a.campaigns || [])
   }, [])
 
   useEffect(() => {

@@ -35,13 +35,15 @@ export default function AdminTransactions() {
   useEffect(() => {
     const params = new URLSearchParams()
     if (typeFilter) params.set("type", typeFilter)
+    const qs = params.toString()
 
-    fetch(`/api/admin/transactions?${params}`)
+    fetch(`/api/admin/transactions${qs ? `?${qs}` : ""}`)
       .then((r) => r.json())
       .then((data) => {
-        setTransactions(data.transactions)
-        setSummary(data.summary)
+        setTransactions(data.transactions || [])
+        setSummary(data.summary || [])
       })
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [typeFilter])
 

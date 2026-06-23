@@ -56,7 +56,8 @@ export default function FraudQueue() {
   useEffect(() => {
     fetch("/api/admin/fraud")
       .then((r) => r.json())
-      .then(setFlags)
+      .then((data) => setFlags(data.flags || []))
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 
