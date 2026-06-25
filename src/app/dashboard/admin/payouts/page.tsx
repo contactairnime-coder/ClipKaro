@@ -69,7 +69,8 @@ export default function AdminPayouts() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold">Payout Management</h1>
+      <h1 className="mb-1 text-2xl font-bold">Payout Management</h1>
+      <p className="mb-6 text-sm text-muted-foreground">Approve, process, and track Razorpay payouts to clippers. Manage pending and completed payments.</p>
 
       <Tabs defaultValue="pending">
         <TabsList>

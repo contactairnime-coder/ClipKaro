@@ -43,7 +43,7 @@ export default function CreatorAnalytics() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Analytics</h1>
-        <p className="text-muted-foreground">Track your campaign performance</p>
+        <p className="text-sm text-muted-foreground">Deep insights into campaign performance, clipper activity, view trends, and return on investment.</p>
       </div>
 
       <motion.div

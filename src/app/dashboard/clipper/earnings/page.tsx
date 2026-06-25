@@ -112,7 +112,7 @@ export default function EarningsPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Earnings</h1>
-        <p className="text-muted-foreground">Track your earnings and request payouts</p>
+        <p className="text-sm text-muted-foreground">Track your total earnings, pending payouts, and withdrawal history. Request UPI withdrawals once you cross ₹100.</p>
       </div>
 
       <motion.div

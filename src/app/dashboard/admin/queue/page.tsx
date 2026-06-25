@@ -55,6 +55,7 @@ export default function AdminQueue() {
       <div className="mb-6 flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold">Queue Monitor</h1>
+          <p className="text-sm text-muted-foreground">Background job queues for view syncing, fraud checks, earnings calculations, email delivery, and payouts.</p>
           <p className="text-muted-foreground">
             {data.totalFailed > 0 ? (
               <span className="text-red-600 font-medium">{data.totalFailed} failed jobs</span>

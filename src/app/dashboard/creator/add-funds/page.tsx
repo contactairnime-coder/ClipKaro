@@ -157,7 +157,7 @@ export default function AddFundsPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Add Funds</h1>
-        <p className="text-muted-foreground">Add money to your Clipr wallet for campaign bounties</p>
+        <p className="text-sm text-muted-foreground">Deposit money into your Clipr wallet via Razorpay to fund campaign bounties and platform fees.</p>
       </div>
 
       <motion.div

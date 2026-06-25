@@ -51,7 +51,7 @@ export default function SettingsPage() {
     <div className="mx-auto max-w-2xl">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-muted-foreground">Manage your profile and preferences</p>
+        <p className="text-sm text-muted-foreground">Update your profile name and UPI ID to receive payouts for approved submissions.</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">

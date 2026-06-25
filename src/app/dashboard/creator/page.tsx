@@ -74,7 +74,7 @@ export default function CreatorHome() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Welcome back, {name || "Creator"}</h1>
-          <p className="text-muted-foreground">Here&apos;s your campaign overview</p>
+          <p className="text-muted-foreground">Overview of your campaigns, recent submissions, and earnings at a glance.</p>
         </div>
         <Link href="/dashboard/creator/campaigns/create">
           <Button size="lg">+ Create Campaign</Button>

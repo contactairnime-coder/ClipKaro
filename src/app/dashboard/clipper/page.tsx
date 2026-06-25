@@ -57,7 +57,7 @@ export default function BrowseCampaigns() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Browse Campaigns</h1>
-        <p className="text-muted-foreground">Find campaigns and start clipping</p>
+        <p className="text-sm text-muted-foreground">Explore active bounty campaigns, filter by platform or bounty amount, and start clipping to earn money.</p>
       </div>
 
       <div className="mb-6 flex flex-col gap-3 md:flex-row">

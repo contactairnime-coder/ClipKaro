@@ -80,7 +80,7 @@ export default function MySubmissions() {
       <div className="mb-6 flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold">My Submissions</h1>
-          <p className="text-muted-foreground">{submissions.length} total submissions</p>
+          <p className="text-sm text-muted-foreground">Track all clips you've submitted across campaigns. Refresh views and monitor earnings in real-time. ({submissions.length} total)</p>
         </div>
         <Card className="w-48">
           <CardContent className="p-4 text-center">

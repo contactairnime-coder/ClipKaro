@@ -57,7 +57,7 @@ export default function AdminTransactions() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Transactions</h1>
-        <p className="text-muted-foreground">All platform financial activity</p>
+        <p className="text-sm text-muted-foreground">Complete financial log — creator deposits, platform fees, clipper earnings, and withdrawal requests across the platform.</p>
       </div>
 
       <motion.div className="mb-6 grid gap-4 md:grid-cols-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>

@@ -58,7 +58,7 @@ export default function AdminOverview() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Admin Overview</h1>
-        <p className="text-muted-foreground">Platform statistics at a glance</p>
+        <p className="text-sm text-muted-foreground">Platform-wide statistics, user growth, revenue, and system health at a glance.</p>
       </div>
 
       <motion.div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>

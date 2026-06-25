@@ -83,6 +83,7 @@ export default function AdminUsers() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">User Management</h1>
+        <p className="mb-2 text-sm text-muted-foreground">View, search, and manage all users across roles. Ban/unban users or inspect their activity.</p>
         <Input placeholder="Search by name or email..." value={search} onChange={(e) => setSearch(e.target.value)} className="mt-2 max-w-sm" />
       </div>
 

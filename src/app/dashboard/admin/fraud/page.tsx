@@ -108,7 +108,7 @@ export default function FraudQueue() {
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Fraud Queue</h1>
-        <p className="text-muted-foreground">{flags.length} unresolved flags</p>
+        <p className="text-sm text-muted-foreground">Monitor suspicious submissions flagged by our fraud detection system. Confirm or dismiss flags. {flags.length} unresolved flag(s).</p>
       </div>
 
       {flags.length === 0 ? (

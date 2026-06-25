@@ -49,7 +49,7 @@ export default function CampaignsList() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">My Campaigns</h1>
-          <p className="text-muted-foreground">{campaigns.length} total campaigns</p>
+          <p className="text-sm text-muted-foreground">Manage all your campaigns — track submissions, approve clips, monitor budget usage, and toggle campaign status. ({campaigns.length} total)</p>
         </div>
         <Link href="/dashboard/creator/campaigns/create">
           <Button>+ New Campaign</Button>

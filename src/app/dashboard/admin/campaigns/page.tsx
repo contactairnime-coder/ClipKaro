@@ -73,7 +73,8 @@ export default function AdminCampaigns() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold">Campaign Approvals</h1>
+      <h1 className="mb-1 text-2xl font-bold">Campaign Approvals</h1>
+      <p className="mb-6 text-sm text-muted-foreground">Review and approve/reject campaigns submitted by creators before they go live.</p>
 
       <Tabs defaultValue="pending">
         <TabsList>
