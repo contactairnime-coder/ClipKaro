@@ -31,8 +31,10 @@ export async function GET(request: Request) {
       return NextResponse.redirect(`${origin}/auth/complete-profile`)
     }
     const email = user.email || ""
-    await prisma.profile.create({
-      data: {
+    await prisma.profile.upsert({
+      where: { id: user.id },
+      update: {},
+      create: {
         id: user.id,
         email,
         name: (meta.name as string) || (meta.full_name as string) || email.split("@")[0] || null,
@@ -41,7 +43,11 @@ export async function GET(request: Request) {
       },
     })
     if (role === "CREATOR") {
-      await prisma.creatorProfile.create({ data: { userId: user.id } }).catch(() => {})
+      await prisma.creatorProfile.upsert({
+        where: { userId: user.id },
+        update: {},
+        create: { userId: user.id },
+      }).catch(() => {})
     }
   }
 

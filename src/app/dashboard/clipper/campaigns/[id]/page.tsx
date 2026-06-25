@@ -64,7 +64,10 @@ export default function CampaignDetailPage() {
         fetch(`/api/submissions/my?campaignId=${params.id}`),
       ])
       if (campRes.ok) setCampaign(await campRes.json())
-      if (subRes.ok) setMySubmissions(await subRes.json())
+      if (subRes.ok) {
+        const data = await subRes.json()
+        setMySubmissions(data.submissions || [])
+      }
       setLoading(false)
     }
     load()
@@ -94,8 +97,8 @@ export default function CampaignDetailPage() {
       setSubmittedUrl("")
       setPlatform("")
 
-      const subRes = await fetch(`/api/submissions/my?campaignId=${params.id}`)
-      if (subRes.ok) setMySubmissions(await subRes.json())
+      const subRes2 = await fetch(`/api/submissions/my?campaignId=${params.id}`)
+      if (subRes2.ok) setMySubmissions((await subRes2.json()).submissions || [])
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to submit")
     } finally {

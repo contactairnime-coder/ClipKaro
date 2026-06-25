@@ -54,7 +54,10 @@ export default function EarningsPage() {
         fetch("/api/user/profile"),
       ])
       if (earnRes.ok) setData(await earnRes.json())
-      if (payoutsRes.ok) setPayouts(await payoutsRes.json())
+      if (payoutsRes.ok) {
+        const data = await payoutsRes.json()
+        setPayouts(data.payouts || [])
+      }
       if (profileRes.ok) {
         const profile = await profileRes.json()
         if (profile?.upiId) setWithdrawUpi(profile.upiId)

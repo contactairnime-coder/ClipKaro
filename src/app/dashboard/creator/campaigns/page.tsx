@@ -31,7 +31,7 @@ export default function CampaignsList() {
     fetch("/api/campaigns/my")
       .then((r) => r.json())
       .then((data) => {
-        if (Array.isArray(data)) setCampaigns(data)
+        setCampaigns(data.campaigns || [])
       })
       .finally(() => setLoading(false))
   }, [])

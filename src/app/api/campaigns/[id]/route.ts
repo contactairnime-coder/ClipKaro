@@ -17,7 +17,13 @@ export async function GET(request: Request, { params }: { params: { id: string }
             },
           },
         },
-        _count: { select: { submissions: true } },
+        submissions: {
+          include: {
+            clipper: {
+              select: { id: true, name: true, email: true },
+            },
+          },
+        },
       },
     })
 

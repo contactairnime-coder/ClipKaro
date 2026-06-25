@@ -49,7 +49,7 @@ export default function BrowseCampaigns() {
 
     fetch(`/api/campaigns?${params}`)
       .then((r) => r.json())
-      .then(setCampaigns)
+      .then((data) => setCampaigns(data.campaigns || []))
       .finally(() => setLoading(false))
   }, [search, platformFilter, sortBy])
 

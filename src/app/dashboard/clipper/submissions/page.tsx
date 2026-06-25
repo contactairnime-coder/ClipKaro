@@ -44,7 +44,7 @@ export default function MySubmissions() {
 
     fetch(`/api/submissions/my?${params}`)
       .then((r) => r.json())
-      .then(setSubmissions)
+      .then((data) => setSubmissions(data.submissions || []))
       .finally(() => setLoading(false))
   }, [statusFilter])
 
