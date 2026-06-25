@@ -71,7 +71,7 @@ function SignupForm() {
       password,
       options: {
         data: { name, role },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback?next=/dashboard`,
       },
     })
 
@@ -88,7 +88,7 @@ function SignupForm() {
   async function handleGoogleSignup() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback?next=/auth/complete-profile` },
+      options: { redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback?next=/auth/complete-profile` },
     })
     if (error) setError(error.message)
   }
